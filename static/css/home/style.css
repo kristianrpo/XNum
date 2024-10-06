@@ -3,11 +3,11 @@
     width: 18rem;
 }
 
-.cards-container{
+.cards-container {
     margin-top: 40px;
 }
 
-.center-cards .col{
+.center-cards .col {
     display: flex;
     flex-direction: column;
     align-items: center;
