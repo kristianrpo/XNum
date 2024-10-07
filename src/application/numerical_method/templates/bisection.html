@@ -62,37 +62,9 @@
       </form>
     </div>
     {% if template_data %}
-    <div class="mt-5 container">
-      <div class="alert alert-dark" role="alert">
-        <h4 class="alert-heading">Información proporcionada por el método</h4>
-        <p>{{ template_data.message_method }}</p>
-      </div>
-    </div>
-    {% if template_data.table %}
-    <div class="table-responsive">
-      <table class="table">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col">i</th>
-            <th scope="col">Xn</th>
-            <th scope="col">F(Xn)</th>
-            <th scope="col">Error</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for key, row in template_data.table.items %}
-          <tr {% if forloop.last %}class="table-warning" {% endif %}>
-            <th scope="row">{{ row.iteration }}</th>
-            <td>{{ row.approximate_value }}</td>
-            <td>{{ row.f_evaluated }}</td>
-            <td>{{ row.error }}</td>
-          </tr>
-          {% endfor %}
-      </table>
-    </div>
+      {% include 'components/alert_message.html' with message=template_data.message_method title="Información proporcionada por el método"%}
+      {% include 'components/result_tables/result_table_1.html' with table=template_data.table %}
     {% endif %}
-    {% endif %}
-
   </div>
 </div>
 
