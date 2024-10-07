@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class HomeConfig(AppConfig):
+class NumericalMethodConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "applications.home"
+    name = "src.application.numerical_method"

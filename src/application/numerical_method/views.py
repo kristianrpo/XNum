@@ -4,7 +4,7 @@ from django.contrib import messages
 from .methods.SENL.bisection import bisection_method
 
 class bisection(TemplateView):
-    template_name = "numerical_method/bisection.html"
+    template_name = "bisection.html"
 
     def post(self, request, *args, **kwargs):
         context = self.get_context_data()
