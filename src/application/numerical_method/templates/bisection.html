@@ -69,25 +69,27 @@
       </div>
     </div>
     {% if template_data.table %}
-    <table class="table">
-      <thead class="thead-dark">
-        <tr>
-          <th scope="col">i</th>
-          <th scope="col">Xm</th>
-          <th scope="col">F(Xm)</th>
-          <th scope="col">Error</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for key, row in template_data.table.items %}
-        <tr {% if forloop.last %}class="table-warning" {% endif %}>
-          <th scope="row">{{ row.iteration }}</th>
-          <td>{{ row.approximate_value }}</td>
-          <td>{{ row.f_evaluated }}</td>
-          <td>{{ row.error }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+    <div class="table-responsive">
+      <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">i</th>
+            <th scope="col">Xm</th>
+            <th scope="col">F(Xm)</th>
+            <th scope="col">Error</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for key, row in template_data.table.items %}
+          <tr {% if forloop.last %}class="table-warning" {% endif %}>
+            <th scope="row">{{ row.iteration }}</th>
+            <td>{{ row.approximate_value }}</td>
+            <td>{{ row.f_evaluated }}</td>
+            <td>{{ row.error }}</td>
+          </tr>
+          {% endfor %}
+      </table>
+    </div>
     {% endif %}
     {% endif %}
 
