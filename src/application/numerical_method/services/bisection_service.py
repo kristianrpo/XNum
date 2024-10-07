@@ -22,10 +22,13 @@ class BisectionService(NumericalMethod):
         current_error = math.inf
 
         # Evaluamos la función en los extremos del intervalo para verificar si alguno de ellos es una raíz exacta.
-        x = interval[0]
-        fa = eval(function_input)
-        x = interval[1]
-        fb = eval(function_input)
+        try:
+            x = interval[0]
+            fa = eval(function_input)
+            x = interval[1]
+            fb = eval(function_input)
+        except Exception as e:
+            return {"message_method": f"Error en la función ingresada, la descripción de este error fué: {str(e)}. Por favor, verifique que la función sea correcta (que use correctamente las funciones de Python, operadores, etc., y se utilice la variable x para la misma)", "table" : {}}
 
         # Si el valor en el extremo inferior es cero, ese punto es una raíz.
         if fa == 0:
