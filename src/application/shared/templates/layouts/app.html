@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="{% static 'css/layouts/style.css' %}" />
     {% block extra_css %}
+
     {% endblock %}
     <title>
       {% block title %}
@@ -26,10 +27,10 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">SENL</a>
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">SNENL</a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <p class="text-center mx-1">
-                  <b>Solución a ecuaciones no lineales</b>
+                  <b>Soluciónes númericas a ecuaciones no lineales</b>
                 </p>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{% url 'numerical_method:bisection' %}">Bisección</a>
