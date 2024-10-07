@@ -1,109 +1,100 @@
 {% extends 'layouts/app.html' %}
 
 {% load static %}
+
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/home/style.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/home/style.css' %}" />
 {% endblock %}
 
-{% block title %} Home Page {% endblock %}
+{% block title %}
+  Home Page
+{% endblock %}
 
 {% block content %}
-<section class="mb-5">
-  <div class="">
-    <div class="row align-items-center g-0">
-      <div class="col-xl-6 col-lg-6 col-md-12">
-        <div>
-          <h1 class="text-black display-4 fw-bold pe-lg-8">
-            Resuelve problemas con precisión utilizando XNum
-          </h1>
-          <p class="text-black-50 mb-4 lead">
-            Descubre la eficiencia de los métodos numéricos para encontrar
-            soluciones rapidamente. ¡Empieza a optimizar tus resultados ahora!
-          </p>
-          <a href="#senl-section" class="btn btn-dark">Encuentra SENL</a>
+  <section class="mb-5">
+    <div class="">
+      <div class="row align-items-center g-0">
+        <div class="col-xl-6 col-lg-6 col-md-12">
+          <div>
+            <h1 class="text-black display-4 fw-bold pe-lg-8">Resuelve problemas con precisión utilizando XNum</h1>
+            <p class="text-black-50 mb-4 lead">Descubre la eficiencia de los métodos numéricos para encontrar soluciones rapidamente. ¡Empieza a optimizar tus resultados ahora!</p>
+            <a href="#senl-section" class="btn btn-dark">Encuentra SENL</a>
+          </div>
         </div>
-      </div>
-      <div class="col-xl-6 col-lg-6 col-md-12 text-lg-end text-center pt-6 mt-5">
-        <img src="{% static 'img/home/person.jpg' %}" alt="" class="img-fluid" />
+        <div class="col-xl-6 col-lg-6 col-md-12 text-lg-end text-center pt-6 mt-5">
+          <img src="{% static 'img/home/person.jpg' %}" alt="" class="img-fluid" />
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="senl-section">
-  <h2 class="font-weight-bold">
-    Soluciones númericas a ecuaciones no lineales (SENL)
-  </h2>
-  <p class="text-secondary">
-    Descubre métodos numéricos que permiten encontrar aproximaciones para las
-    raíces de ecuaciones no lineales
-  </p>
-  <div class="cards-container center-cards">
-    <div class="row">
-      <div class="col">
-        <div class="card no-border">
-          <img src="{% static 'img/methods/SENL/bisection.webp' %}" class="card-img-top" alt="Bisección" />
-          <div class="card-body">
-            <p class="card-text text-center">Método de bisección</p>
+  <section id="senl-section">
+    <h2 class="font-weight-bold">Soluciones númericas a ecuaciones no lineales (SENL)</h2>
+    <p class="text-secondary">Descubre métodos numéricos que permiten encontrar aproximaciones para las raíces de ecuaciones no lineales</p>
+    <div class="cards-container center-cards">
+      <div class="row">
+        <div class="col">
+          <div class="card no-border">
+            <img src="{% static 'img/methods/SENL/bisection.webp' %}" class="card-img-top" alt="Bisección" />
+            <div class="card-body">
+              <p class="card-text text-center">Método de bisección</p>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="col">
-        <div class="card no-border">
-          <img src="{% static 'img/methods/SENL/regula-falsi.webp' %}" class="card-img-top" alt="Regla Falsa" />
-          <div class="card-body">
-            <p class="card-text text-center">Método de regla falsa</p>
+        <div class="col">
+          <div class="card no-border">
+            <img src="{% static 'img/methods/SENL/regula-falsi.webp' %}" class="card-img-top" alt="Regla Falsa" />
+            <div class="card-body">
+              <p class="card-text text-center">Método de regla falsa</p>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="col">
-        <div class="card no-border">
-          <img src="{% static 'img/methods/SENL/fixed-point.webp' %}" class="card-img-top" alt="Punto fijo" />
-          <div class="card-body">
-            <p class="card-text text-center">Método de punto fijo</p>
+        <div class="col">
+          <div class="card no-border">
+            <img src="{% static 'img/methods/SENL/fixed-point.webp' %}" class="card-img-top" alt="Punto fijo" />
+            <div class="card-body">
+              <p class="card-text text-center">Método de punto fijo</p>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="col">
-        <div class="card no-border">
-          <img src="{% static 'img/methods/SENL/newton-raphson.webp' %}" class="card-img-top" alt="Newton-Raphson" />
-          <div class="card-body">
-            <p class="card-text text-center">Método de Newton-Raphson</p>
+        <div class="col">
+          <div class="card no-border">
+            <img src="{% static 'img/methods/SENL/newton-raphson.webp' %}" class="card-img-top" alt="Newton-Raphson" />
+            <div class="card-body">
+              <p class="card-text text-center">Método de Newton-Raphson</p>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="col">
-        <div class="card no-border">
-          <img src="{% static 'img/methods/SENL/secant.webp' %}" class="card-img-top" alt="Secante" />
-          <div class="card-body">
-            <p class="card-text text-center">Método de la secante</p>
+        <div class="col">
+          <div class="card no-border">
+            <img src="{% static 'img/methods/SENL/secant.webp' %}" class="card-img-top" alt="Secante" />
+            <div class="card-body">
+              <p class="card-text text-center">Método de la secante</p>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="col">
-        <div class="card no-border">
-          <img src="{% static 'img/methods/SENL/multiple-root-1.webp' %}" class="card-img-top" alt="Multiple root #1" />
-          <div class="card-body">
-            <p class="card-text text-center">Método de raíces múltiples #1</p>
+        <div class="col">
+          <div class="card no-border">
+            <img src="{% static 'img/methods/SENL/multiple-root-1.webp' %}" class="card-img-top" alt="Multiple root #1" />
+            <div class="card-body">
+              <p class="card-text text-center">Método de raíces múltiples #1</p>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="col">
-        <div class="card no-border">
-          <img src="{% static 'img/methods/SENL/multiple-root-2.webp' %}" class="card-img-top" alt="Multiple root #2" />
-          <div class="card-body">
-            <p class="card-text text-center">Método de raíces múltiples #2</p>
+        <div class="col">
+          <div class="card no-border">
+            <img src="{% static 'img/methods/SENL/multiple-root-2.webp' %}" class="card-img-top" alt="Multiple root #2" />
+            <div class="card-body">
+              <p class="card-text text-center">Método de raíces múltiples #2</p>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="col">
-        <div class="card no-border">
+        <div class="col">
+          <div class="card no-border"></div>
         </div>
+        <div class="col"></div>
+        <div class="col"></div>
       </div>
-      <div class="col"></div>
-      <div class="col"></div>
     </div>
-  </div>
-</section>
-
+  </section>
 {% endblock %}
