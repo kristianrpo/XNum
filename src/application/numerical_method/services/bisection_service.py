@@ -52,15 +52,15 @@ class BisectionService(NumericalMethod):
                 table[current_iteration] = {}
 
                 # Calculamos el punto medio del intervalo actual.
-                Xm = (interval[0] + interval[1]) / 2
+                Xn = (interval[0] + interval[1]) / 2
 
                 # Evaluamos la función en el punto medio.
-                x = Xm
+                x = Xn
                 f = eval(function_input)
 
                 # Guardamos los datos de la iteración actual en la tabla.
                 table[current_iteration]["iteration"] = current_iteration
-                table[current_iteration]["approximate_value"] = Xm
+                table[current_iteration]["approximate_value"] = Xn
                 table[current_iteration]["f_evaluated"] = f
 
                 # Para la primera iteración, el error se mantiene como infinito (no hay valor previo para comparar).
@@ -88,7 +88,7 @@ class BisectionService(NumericalMethod):
                 # Si la función evaluada en el punto medio es cero, hemos encontrado la raíz exacta.
                 if f == 0:
                     return {
-                        "message_method": "{} es raiz de f(x)".format(Xm),
+                        "message_method": "{} es raiz de f(x)".format(Xn),
                         "table": table,
                     }
 
@@ -96,18 +96,18 @@ class BisectionService(NumericalMethod):
                 elif current_error < tolerance:
                     return {
                         "message_method": "{} es una aproximación de la raiz de f(x) con un error de {}".format(
-                            Xm, current_error
+                            Xn, current_error
                         ),
                         "table": table,
                     }
 
-                # Si el producto f(a) * f(Xm) es negativo, la raíz está en el subintervalo [a, Xm].
+                # Si el producto f(a) * f(Xn) es negativo, la raíz está en el subintervalo [a, Xn].
                 elif fa * f < 0:
-                    interval = [interval[0], Xm]
+                    interval = [interval[0], Xn]
 
-                # Si el producto f(b) * f(Xm) es negativo, la raíz está en el subintervalo [Xm, b].
+                # Si el producto f(b) * f(Xn) es negativo, la raíz está en el subintervalo [Xn, b].
                 elif fb * f < 0:
-                    interval = [Xm, interval[1]]
+                    interval = [Xn, interval[1]]
 
                 # Se evalua la función en el nuevo intervalo
                 x = interval[0]
