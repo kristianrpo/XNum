@@ -1,5 +1,7 @@
 import math
-from src.application.numerical_method.interfaces.numerical_method import NumericalMethodService
+from src.application.numerical_method.interfaces.numerical_method import (
+    NumericalMethod,
+)
 
 """
 
@@ -7,7 +9,8 @@ El método de bisección es una técnica numérica para encontrar raíces de ecu
 
 """
 
-class BisectionService(NumericalMethodService):
+
+class BisectionService(NumericalMethod):
     def solve(self, function_input, interval, tolerance, max_iterations, precision):
         # Definición de tabla que contiene todo el proceso
         table = {}
@@ -26,11 +29,17 @@ class BisectionService(NumericalMethodService):
 
         # Si el valor en el extremo inferior es cero, ese punto es una raíz.
         if fa == 0:
-            return {"message_method": "{} es raiz de f(x)".format(interval[0]), "table": {}}
+            return {
+                "message_method": "{} es raiz de f(x)".format(interval[0]),
+                "table": {},
+            }
 
         # Si el valor en el extremo superior es cero, ese punto es una raíz.
         elif fb == 0:
-            return {"message_method": "{} es raiz de f(x)".format(interval[1]), "table": {}}
+            return {
+                "message_method": "{} es raiz de f(x)".format(interval[1]),
+                "table": {},
+            }
 
         # Si el producto de f(a) y f(b) es negativo, se verifica que existe una raíz en el intervalo según el teorema del valor intermedio, y se permite realizar el metodo de bisección para este caso.
         elif fa * fb < 0:
@@ -75,7 +84,10 @@ class BisectionService(NumericalMethodService):
 
                 # Si la función evaluada en el punto medio es cero, hemos encontrado la raíz exacta.
                 if f == 0:
-                    return {"message_method": "{} es raiz de f(x)".format(Xm), "table": table}
+                    return {
+                        "message_method": "{} es raiz de f(x)".format(Xm),
+                        "table": table,
+                    }
 
                 # Si el error es menor que la tolerancia especificada, aceptamos el punto medio como una aproximación de la raíz.
                 elif current_error < tolerance:
@@ -117,4 +129,3 @@ class BisectionService(NumericalMethodService):
                 ),
                 "table": {},
             }
-        

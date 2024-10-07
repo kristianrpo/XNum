@@ -17,8 +17,8 @@ INSTALLED_APPS = [
     "django_browser_reload",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'src.application.numerical_method',
-    'src.application.home',
+    "src.application.numerical_method",
+    "src.application.home",
 ]
 
 MIDDLEWARE = [
@@ -53,8 +53,8 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.dummy',
+    "default": {
+        "ENGINE": "django.db.backends.dummy",
     }
 }
 

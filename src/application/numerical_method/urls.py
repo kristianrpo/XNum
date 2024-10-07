@@ -1,11 +1,11 @@
 from django.urls import path
-from . import views as numerical_method
+from .views.bisection_view import BisectionView
 
 app_name = "numerical_method"
 urlpatterns = [
     path(
         "bisection/",
-        numerical_method.BisectionView.as_view(),
+        BisectionView.as_view(),
         name="bisection",
     ),
 ]
