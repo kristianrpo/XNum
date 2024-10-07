@@ -1,10 +1,15 @@
-from django.shortcuts import render
 from django.views.generic import TemplateView
-from django.contrib import messages
-from .methods.SENL.bisection import bisection_method
+from src.application.numerical_method.services.bisection_service import NumericalMethodService
+from .containers.numerical_method_container import NumericalMethodContainer
+from dependency_injector.wiring import inject, Provide
 
-class bisection(TemplateView):
+class BisectionView(TemplateView):
     template_name = "bisection.html"
+
+    @inject
+    def __init__(self, method_service: NumericalMethodService = Provide[NumericalMethodContainer.bisection_service], **kwargs):
+        super().__init__(**kwargs)
+        self.method_service = method_service
 
     def post(self, request, *args, **kwargs):
         context = self.get_context_data()
@@ -18,7 +23,7 @@ class bisection(TemplateView):
 
         interval = [interval_a, interval_b]
         
-        template_data = bisection_method(function_input, interval, tolerance, max_iterations, precision)
+        template_data = self.method_service.solve(function_input, interval, tolerance, max_iterations, precision)
         context['template_data'] = template_data
 
         return self.render_to_response(context)

@@ -17,6 +17,8 @@ INSTALLED_APPS = [
     "django_browser_reload",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'src.application.numerical_method',
+    'src.application.home',
 ]
 
 MIDDLEWARE = [

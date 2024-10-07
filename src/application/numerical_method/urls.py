@@ -5,7 +5,7 @@ app_name = "numerical_method"
 urlpatterns = [
     path(
         "bisection/",
-        numerical_method.bisection.as_view(),
+        numerical_method.BisectionView.as_view(),
         name="bisection",
     ),
 ]
