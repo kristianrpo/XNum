@@ -8,7 +8,7 @@ El método de bisección es una técnica numérica para encontrar raíces de ecu
 """
 
 
-def bisection(function_input, interval, tolerance, max_iterations, flag_tolerance):
+def bisection_method(function_input, interval, tolerance, max_iterations, flag_tolerance):
     # Definición de tabla que contiene todo el proceso
     table = {}
 
@@ -26,11 +26,11 @@ def bisection(function_input, interval, tolerance, max_iterations, flag_toleranc
 
     # Si el valor en el extremo inferior es cero, ese punto es una raíz.
     if fa == 0:
-        return {"message": "{} es raiz de f(x)".format(interval[0]), "table": {}}
+        return {"message_method": "{} es raiz de f(x)".format(interval[0]), "table": {}}
 
     # Si el valor en el extremo superior es cero, ese punto es una raíz.
     elif fb == 0:
-        return {"message": "{} es raiz de f(x)".format(interval[1]), "table": {}}
+        return {"message_method": "{} es raiz de f(x)".format(interval[1]), "table": {}}
 
     # Si el producto de f(a) y f(b) es negativo, se verifica que existe una raíz en el intervalo según el teorema del valor intermedio, y se permite realizar el metodo de bisección para este caso.
     elif fa * fb < 0:
@@ -47,40 +47,40 @@ def bisection(function_input, interval, tolerance, max_iterations, flag_toleranc
             f = eval(function_input)
 
             # Guardamos los datos de la iteración actual en la tabla.
-            table[current_iteration]["i"] = current_iteration
-            table[current_iteration]["Xm"] = Xm
-            table[current_iteration]["F(Xm)"] = f
+            table[current_iteration]["iteration"] = current_iteration
+            table[current_iteration]["approximate_value"] = Xm
+            table[current_iteration]["f_evaluated"] = f
 
             # Para la primera iteración, el error se mantiene como infinito (no hay valor previo para comparar).
             if current_iteration == 1:
-                table[current_iteration]["Error"] = current_error
+                table[current_iteration]["error"] = current_error
 
                 # Calculamos el error como la diferencia absoluta entre el punto medio actual y el anterior. (Error de dispersión)
             else:
                 if flag_tolerance:
                     current_error = abs(
-                        table[current_iteration]["Xm"]
-                        - table[current_iteration - 1]["Xm"]
+                        table[current_iteration]["approximate_value"]
+                        - table[current_iteration - 1]["approximate_value"]
                     )
-                    table[current_iteration]["Error"] = current_error
+                    table[current_iteration]["error"] = current_error
                 else:
                     current_error = abs(
                         (
-                            table[current_iteration]["Xm"]
-                            - table[current_iteration - 1]["Xm"]
+                            table[current_iteration]["approximate_value"]
+                            - table[current_iteration - 1]["approximate_value"]
                         )
-                        / table[current_iteration]["Xm"]
+                        / table[current_iteration]["approximate_value"]
                     )
-                    table[current_iteration]["Error"] = current_error
+                    table[current_iteration]["error"] = current_error
 
                     # Si la función evaluada en el punto medio es cero, hemos encontrado la raíz exacta.
             if f == 0:
-                return {"message": "{} es raiz de f(x)".format(Xm), "table": table}
+                return {"message_method": "{} es raiz de f(x)".format(Xm), "table": table}
 
                 # Si el error es menor que la tolerancia especificada, aceptamos el punto medio como una aproximación de la raíz.
             elif current_error < tolerance:
                 return {
-                    "message": "{} es una aproximación de la raiz de f(x) con un error de {}".format(
+                    "message_method": "{} es una aproximación de la raiz de f(x) con un error de {}".format(
                         Xm, current_error
                     ),
                     "table": table,
@@ -105,14 +105,14 @@ def bisection(function_input, interval, tolerance, max_iterations, flag_toleranc
 
             # Si se alcanza el número máximo de iteraciones sin encontrar una raíz, se retorna un mensaje de fallo.
         return {
-            "message": "Fracasó en {} iteraciones".format(max_iterations),
+            "message_method": "Fracasó en {} iteraciones".format(max_iterations),
             "table": table,
         }
 
         # Si el producto f(a) * f(b) no es negativo, el intervalo proporcionado no es adecuado para la bisección.
     else:
         return {
-            "message": "El intervalo es inadecuado, recuerde que se debe encontrar un raíz para el intervalo dado".format(
+            "message_method": "El intervalo es inadecuado, recuerde que se debe encontrar un raíz para el intervalo dado".format(
                 max_iterations
             ),
             "table": {},
