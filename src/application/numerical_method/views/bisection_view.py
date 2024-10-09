@@ -6,6 +6,7 @@ from src.application.numerical_method.containers.numerical_method_container impo
     NumericalMethodContainer,
 )
 from dependency_injector.wiring import inject, Provide
+from src.application.shared.utils.plot_function import plot_function
 
 
 class BisectionView(TemplateView):
@@ -25,6 +26,8 @@ class BisectionView(TemplateView):
     def post(self, request, *args, **kwargs):
         context = self.get_context_data()
 
+        template_data = {}
+        
         interval_a = float(request.POST.get("interval_a"))
         interval_b = float(request.POST.get("interval_b"))
         tolerance = float(request.POST.get("tolerance"))
@@ -34,9 +37,15 @@ class BisectionView(TemplateView):
 
         interval = [interval_a, interval_b]
 
-        template_data = self.method_service.solve(
+        method_response = self.method_service.solve(
             function_input, interval, tolerance, max_iterations, precision
         )
+
+        plot_function(
+            function_input, method_response["have_solution"], method_response["root"]
+        )
+
+        template_data = template_data | method_response
         context["template_data"] = template_data
 
         return self.render_to_response(context)
