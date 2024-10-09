@@ -44,11 +44,13 @@ class BisectionView(TemplateView):
             function_input, interval, tolerance, max_iterations, precision
         )
 
-        if method_response['is_successful']:
+        if method_response["is_successful"]:
             plot_function(
-                function_input, method_response["have_solution"], method_response["root"]
+                function_input,
+                method_response["have_solution"],
+                method_response["root"],
             )
-            
+
         template_data = template_data | method_response
         context["template_data"] = template_data
 

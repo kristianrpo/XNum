@@ -1,7 +1,7 @@
 import numpy as np
 from config.settings import BASE_DIR
 import matplotlib.pyplot as plt
-import math 
+import math
 
 """
 Función que se encarga de generar un archivo vectorizado de la gráfica de una función matemática.
@@ -24,7 +24,7 @@ def plot_function(function_input: str, have_solution: bool, root: float) -> None
         # Se grafican los puntos de intersección con y = 0, para las raices que son numeros reales y que se encuentran en el intervalo.
         plt.plot(root, 0, marker="o", color="#f7dc6f")
         plt.text(root, 0, f"({root}, 0)", fontsize=9, verticalalignment="bottom")
-        
+
     # Evaluamos la función en el rango de valores de 'x' que generamos anteriormentey almacenamos cada resultado en una lista.
     y_vals = [eval(function_input, {"math": math, "x": val}) for val in x_vals]
 
