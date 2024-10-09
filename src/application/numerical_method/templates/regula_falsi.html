@@ -6,18 +6,18 @@
 {% endblock %}
 
 {% block title %}
-  Método de bisección
+  Método de regla Falsa
 {% endblock %}
 
 {% block content %}
   <div class="container">
-    <h1 class="font-weight-bold mb-4 text-center">Método de bisección</h1>
+    <h1 class="font-weight-bold mb-4 text-center">Método de regla falsa</h1>
     <div class="row">
       <div class="col-md-6">
         {% include 'components/input_guidelines_card.html' %}
       </div>
       <div class="col-md-6">
-        <form method="POST" action="{% url 'numerical_method:bisection' %}">
+        <form method="POST" action="{% url 'numerical_method:regula_falsi' %}">
           {% csrf_token %}
           <div class="form-group">
             <label for="interval_a">Ingrese punto inicial de intervalo:</label>
