@@ -2,6 +2,7 @@
     border: none;
     width: 18rem;
 }
+
 .card:hover {
     cursor: pointer;
     text-decoration-color: #a18262;
