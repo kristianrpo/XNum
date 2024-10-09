@@ -11,7 +11,14 @@ El método de bisección es una técnica numérica para encontrar raíces de ecu
 
 
 class BisectionService(NumericalMethod):
-    def solve(self, function_input, interval, tolerance, max_iterations, precision):
+    def solve(
+        self,
+        function_input: str,
+        interval: list[float],
+        tolerance: float,
+        max_iterations: int,
+        precision: int,
+    ) -> dict:
         # Definición de tabla que contiene todo el proceso
         table = {}
 

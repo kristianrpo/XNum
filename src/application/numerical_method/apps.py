@@ -7,7 +7,7 @@ class NumericalMethodConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "src.application.numerical_method"
 
-    def ready(self):
+    def ready(self) -> None:
         container = NumericalMethodContainer()
         container.wire(
             modules=["src.application.numerical_method.views.bisection_view"]

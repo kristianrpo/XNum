@@ -7,6 +7,7 @@ from src.application.numerical_method.containers.numerical_method_container impo
 )
 from dependency_injector.wiring import inject, Provide
 from src.application.shared.utils.plot_function import plot_function
+from django.http import HttpRequest, HttpResponse
 
 
 class BisectionView(TemplateView):
@@ -23,11 +24,13 @@ class BisectionView(TemplateView):
         super().__init__(**kwargs)
         self.method_service = method_service
 
-    def post(self, request, *args, **kwargs):
+    def post(
+        self, request: HttpRequest, *args: object, **kwargs: object
+    ) -> HttpResponse:
         context = self.get_context_data()
 
         template_data = {}
-        
+
         interval_a = float(request.POST.get("interval_a"))
         interval_b = float(request.POST.get("interval_b"))
         tolerance = float(request.POST.get("tolerance"))

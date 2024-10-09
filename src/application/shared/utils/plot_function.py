@@ -10,7 +10,7 @@ Un archivo vectorizado es un tipo de archivo gráfico que almacena imágenes usa
 """
 
 
-def plot_function(function_input, have_solution, root):
+def plot_function(function_input: str, have_solution: bool, root: float) -> None:
     output_file = BASE_DIR / "static/img/numerical_method/function_plot.svg"
 
     # Se define la variable simbólica 'x', o independiente, que es la que normalmente se usa en funciones matemáticas.
