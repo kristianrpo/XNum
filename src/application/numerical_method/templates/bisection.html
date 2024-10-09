@@ -57,7 +57,7 @@
         {% if template_data.is_successful %}
           {% include 'components/result_tables/result_table_1.html' with table=template_data.table %}
           <div class="container d-flex justify-content-center">
-            <img src="{% static 'img/numerical_method/function_plot.svg' %}" alt="Gráfica de la función" width="800" />
+            <img src="{% static 'img/numerical_method/function_plot.svg' %}" alt="Gráfica de la función" class="img-fluid" width="800px"/>
           </div>
         {% endif %}
       {% endif %}
