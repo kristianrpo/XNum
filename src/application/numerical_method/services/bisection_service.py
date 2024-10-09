@@ -36,11 +36,11 @@ class BisectionService(NumericalMethod):
             fb = eval(function_input)
         except Exception as e:
             return {
-                "message_method": f"Error en la función ingresada, la descripción de este error fué: {str(e)}. Por favor, verifique que la función sea correcta (que use correctamente las funciones de Python, operadores, etc., y se utilice la variable x para la misma)",
+                "message_method": f"Error en la función ingresada, la descripción de este error fué: {str(e)}. Por favor, verifique que la función sea correcta (que use correctamente las funciones de Python, operadores, funciones math, etc., y se utilice la variable x para la misma)",
                 "table": {},
                 "is_successful": False,
                 "have_solution": False,
-                "root": None,
+                "root": 0.0,
             }
 
         # Si el valor en el extremo inferior es cero, ese punto es una raíz.
@@ -155,7 +155,7 @@ class BisectionService(NumericalMethod):
                 "table": table,
                 "is_successful": True,
                 "have_solution": False,
-                "root": None,
+                "root": 0.0,
             }
 
         # Si el producto f(a) * f(b) no es negativo, el intervalo proporcionado no es adecuado para la bisección.
@@ -167,5 +167,5 @@ class BisectionService(NumericalMethod):
                 "table": {},
                 "is_successful": False,
                 "have_solution": False,
-                "root": None,
+                "root": 0.0,
             }
