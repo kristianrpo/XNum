@@ -1,4 +1,3 @@
-# apps.py
 from django.apps import AppConfig
 from .containers.numerical_method_container import NumericalMethodContainer
 
@@ -10,5 +9,8 @@ class NumericalMethodConfig(AppConfig):
     def ready(self) -> None:
         container = NumericalMethodContainer()
         container.wire(
-            modules=["src.application.numerical_method.views.bisection_view"]
+            modules=[
+                "src.application.numerical_method.views.bisection_view",
+                "src.application.numerical_method.views.regula_falsi_view",
+            ]
         )
