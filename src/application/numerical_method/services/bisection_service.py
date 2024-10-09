@@ -31,20 +31,33 @@ class BisectionService(NumericalMethod):
             return {
                 "message_method": f"Error en la función ingresada, la descripción de este error fué: {str(e)}. Por favor, verifique que la función sea correcta (que use correctamente las funciones de Python, operadores, etc., y se utilice la variable x para la misma)",
                 "table": {},
+                "is_successful": False,
+                "have_solution": False,
+                "root": None,
             }
 
         # Si el valor en el extremo inferior es cero, ese punto es una raíz.
         if fa == 0:
             return {
-                "message_method": "{} es raiz de f(x)".format(interval[0]),
+                "message_method": "{} es raiz de f(x) y es el extremo inferior del intervalo".format(
+                    interval[0]
+                ),
                 "table": {},
+                "is_successful": True,
+                "have_solution": True,
+                "root": interval[0],
             }
 
         # Si el valor en el extremo superior es cero, ese punto es una raíz.
         elif fb == 0:
             return {
-                "message_method": "{} es raiz de f(x)".format(interval[1]),
+                "message_method": "{} es raiz de f(x) y es el extremo superior del intervalo".format(
+                    interval[1]
+                ),
                 "table": {},
+                "is_successful": True,
+                "have_solution": True,
+                "root": interval[1],
             }
 
         # Si el producto de f(a) y f(b) es negativo, se verifica que existe una raíz en el intervalo según el teorema del valor intermedio, y se permite realizar el metodo de bisección para este caso.
@@ -93,6 +106,9 @@ class BisectionService(NumericalMethod):
                     return {
                         "message_method": "{} es raiz de f(x)".format(Xn),
                         "table": table,
+                        "is_successful": True,
+                        "have_solution": True,
+                        "root": Xn,
                     }
 
                 # Si el error es menor que la tolerancia especificada, aceptamos el punto medio como una aproximación de la raíz.
@@ -102,6 +118,9 @@ class BisectionService(NumericalMethod):
                             Xn, current_error
                         ),
                         "table": table,
+                        "is_successful": True,
+                        "have_solution": True,
+                        "root": Xn,
                     }
 
                 # Si el producto f(a) * f(Xn) es negativo, la raíz está en el subintervalo [a, Xn].
@@ -123,8 +142,13 @@ class BisectionService(NumericalMethod):
 
             # Si se alcanza el número máximo de iteraciones sin encontrar una raíz, se retorna un mensaje de fallo.
             return {
-                "message_method": "Fracasó en {} iteraciones".format(max_iterations),
+                "message_method": "El método funcionó correctamente pero no se encontró solución para {} iteraciones".format(
+                    max_iterations
+                ),
                 "table": table,
+                "is_successful": True,
+                "have_solution": False,
+                "root": None,
             }
 
         # Si el producto f(a) * f(b) no es negativo, el intervalo proporcionado no es adecuado para la bisección.
@@ -134,4 +158,7 @@ class BisectionService(NumericalMethod):
                     max_iterations
                 ),
                 "table": {},
+                "is_successful": False,
+                "have_solution": False,
+                "root": None,
             }
