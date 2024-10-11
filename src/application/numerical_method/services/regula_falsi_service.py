@@ -1,6 +1,6 @@
 import math
-from src.application.numerical_method.interfaces.numerical_method import (
-    NumericalMethod,
+from src.application.numerical_method.interfaces.interval_method import (
+    IntervalMethod,
 )
 
 """
@@ -10,15 +10,20 @@ El método de regla falsa es una técnica numérica para encontrar raíces de ec
 """
 
 
-class RegulaFalsiService(NumericalMethod):
+class RegulaFalsiService(IntervalMethod):
     def solve(
         self,
-        function_input: str,
-        interval: list[float],
+        interval_a: float,
+        interval_b: float,
         tolerance: float,
         max_iterations: int,
+        function_f: str,
         precision: int,
     ) -> dict:
+
+        # Definición del intervalo inicial.
+        interval = [interval_a, interval_b]
+
         # Definición de tabla que contiene todo el proceso
         table = {}
 
@@ -31,9 +36,9 @@ class RegulaFalsiService(NumericalMethod):
         # Evaluamos la función en los extremos del intervalo para verificar si alguno de ellos es una raíz exacta.
         try:
             x = interval[0]
-            fa = eval(function_input)
+            fa = eval(function_f)
             x = interval[1]
-            fb = eval(function_input)
+            fb = eval(function_f)
         except Exception as e:
             return {
                 "message_method": f"Error en la función ingresada, la descripción de este error fué: {str(e)}. Por favor, verifique que la función sea correcta (que use correctamente las funciones de Python, operadores, funciones math, etc., y se utilice la variable x para la misma)",
@@ -77,9 +82,9 @@ class RegulaFalsiService(NumericalMethod):
                 # Calculamos el valor aproximado que se obtiene a partir de la intersección de y=0 y la recta secante utilizando el intervalo actual del intervalo actual.
                 Xn = (interval[0] * fb - interval[1] * fa) / (fb - fa)
 
-                # Evaluamos la función en el punto medio.
+                # Evaluamos la función en el valor aproximado.
                 x = Xn
-                f = eval(function_input)
+                f = eval(function_f)
 
                 # Guardamos los datos de la iteración actual en la tabla.
                 table[current_iteration]["iteration"] = current_iteration
@@ -90,7 +95,7 @@ class RegulaFalsiService(NumericalMethod):
                 if current_iteration == 1:
                     table[current_iteration]["error"] = current_error
 
-                # Calculamos el error como la diferencia absoluta entre el punto medio actual y el anterior. (Error de dispersión)
+                # Calculamos el error como la diferencia absoluta entre el valor aproximado actual y el anterior. (Error de dispersión)
                 else:
                     if precision:
                         current_error = abs(
@@ -140,9 +145,9 @@ class RegulaFalsiService(NumericalMethod):
 
                 # Se evalua la función en el nuevo intervalo
                 x = interval[0]
-                fa = eval(function_input)
+                fa = eval(function_f)
                 x = interval[1]
-                fb = eval(function_input)
+                fb = eval(function_f)
 
                 # Incrementamos el contador de iteraciones.
                 current_iteration += 1

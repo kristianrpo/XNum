@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView
-from src.application.numerical_method.interfaces.numerical_method import (
-    NumericalMethod,
+from src.application.numerical_method.interfaces.interval_method import (
+    IntervalMethod,
 )
 from src.application.numerical_method.containers.numerical_method_container import (
     NumericalMethodContainer,
@@ -16,7 +16,7 @@ class RegulaFalsiView(TemplateView):
     @inject
     def __init__(
         self,
-        method_service: NumericalMethod = Provide[
+        method_service: IntervalMethod = Provide[
             NumericalMethodContainer.regula_falsi_service
         ],
         **kwargs
@@ -35,18 +35,16 @@ class RegulaFalsiView(TemplateView):
         interval_b = float(request.POST.get("interval_b"))
         tolerance = float(request.POST.get("tolerance"))
         max_iterations = int(request.POST.get("max_iterations"))
-        function_input = request.POST.get("function_input")
+        function_f = request.POST.get("function_f")
         precision = int(request.POST.get("precision"))
 
-        interval = [interval_a, interval_b]
-
         method_response = self.method_service.solve(
-            function_input, interval, tolerance, max_iterations, precision
+            interval_a, interval_b, tolerance, max_iterations, function_f, precision
         )
 
         if method_response["is_successful"]:
             plot_function(
-                function_input,
+                function_f,
                 method_response["have_solution"],
                 method_response["root"],
             )
