@@ -5,11 +5,11 @@ class IterativeMethod(ABC):
     @abstractmethod
     def solve(
         self,
-        initial_point: float,
+        x0: float,
         tolerance: float,
         max_iterations: int,
         precision: int,
         function_f: str,
-        function_g: str,
+        **kwargs,
     ) -> dict:
         pass
