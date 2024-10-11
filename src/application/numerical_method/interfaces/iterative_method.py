@@ -1,14 +1,15 @@
 from abc import ABC, abstractmethod
 
 
-class NumericalMethod(ABC):
+class IterativeMethod(ABC):
     @abstractmethod
     def solve(
         self,
-        function_input: str,
-        interval: list[float],
+        initial_point: float,
         tolerance: float,
         max_iterations: int,
         precision: int,
+        function_f: str,
+        function_g: str,
     ) -> dict:
         pass
