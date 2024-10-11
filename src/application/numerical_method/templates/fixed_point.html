@@ -20,8 +20,8 @@
         <form method="POST" action="{% url 'numerical_method:fixed_point' %}">
           {% csrf_token %}
           <div class="form-group">
-            <label for="initial_point">Ingrese punto inicial:</label>
-            <input type="number" class="form-control" id="initial_point" name="initial_point" placeholder="Ingresar punto inicial del invervalo" step="any" required />
+            <label for="x0">Ingrese punto inicial:</label>
+            <input type="number" class="form-control" id="x0" name="x0" placeholder="Ingresar punto inicial del invervalo" step="any" required />
           </div>
           <div class="form-group">
             <label for="tolerance">Tolerancia:</label>

@@ -31,7 +31,7 @@ class FixedPointView(TemplateView):
 
         template_data = {}
 
-        initial_point = float(request.POST.get("initial_point"))
+        x0 = float(request.POST.get("x0"))
         tolerance = float(request.POST.get("tolerance"))
         max_iterations = int(request.POST.get("max_iterations"))
         precision = int(request.POST.get("precision"))
@@ -39,7 +39,12 @@ class FixedPointView(TemplateView):
         function_g = request.POST.get("function_g")
 
         method_response = self.method_service.solve(
-            initial_point, tolerance, max_iterations, precision, function_f, function_g
+            x0=x0,
+            tolerance=tolerance,
+            max_iterations=max_iterations,
+            precision=precision,
+            function_f=function_f,
+            function_g=function_g,
         )
 
         if method_response["is_successful"]:
