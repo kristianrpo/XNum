@@ -1,14 +1,15 @@
 from abc import ABC, abstractmethod
 
 
-class NumericalMethod(ABC):
+class IntervalMethod(ABC):
     @abstractmethod
     def solve(
         self,
-        function_input: str,
-        interval: list[float],
+        interval_a: float,
+        interval_b: float,
         tolerance: float,
         max_iterations: int,
+        function_f: str,
         precision: int,
     ) -> dict:
         pass

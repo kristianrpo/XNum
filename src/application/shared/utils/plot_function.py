@@ -9,7 +9,7 @@ Un archivo vectorizado es un tipo de archivo gráfico que almacena imágenes usa
 """
 
 
-def plot_function(function_input: str, have_solution: bool, root: float) -> None:
+def plot_function(function_f: str, have_solution: bool, root: float) -> None:
     output_file = BASE_DIR / "static/img/numerical_method/function_plot.svg"
 
     # Se crea una figura de tamaño 6x4 pulgadas, es como el lienzo sobre el cual se pinta el gráfico.
@@ -26,7 +26,7 @@ def plot_function(function_input: str, have_solution: bool, root: float) -> None
         plt.text(root, 0, f"({root}, 0)", fontsize=9, verticalalignment="bottom")
 
     # Evaluamos la función en el rango de valores de 'x' que generamos anteriormentey almacenamos cada resultado en una lista.
-    y_vals = [eval(function_input, {"math": math, "x": val}) for val in x_vals]
+    y_vals = [eval(function_f, {"math": math, "x": val}) for val in x_vals]
 
     # Ajustar los límites de los ejes para el recuadro de la grafica como tal
     plt.xlim(root - 5, root + 5)  # Ajusta el rango horizontal para una vista más amplia
@@ -41,7 +41,7 @@ def plot_function(function_input: str, have_solution: bool, root: float) -> None
     # Se establece una etiqueta para identificar eje 'y'.
     plt.ylabel("y")
     # Se establece el titulo de la grafica en la parte superior de la misma.
-    plt.title(f"y = {function_input}")
+    plt.title(f"y = {function_f}")
     # Se establece que aparezca una cuadricula en el gráfico donde va la función.
     plt.grid(True)
 

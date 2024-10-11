@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView
-from src.application.numerical_method.interfaces.interval_method import (
-    IntervalMethod,
+from src.application.numerical_method.interfaces.iterative_method import (
+    IterativeMethod,
 )
 from src.application.numerical_method.containers.numerical_method_container import (
     NumericalMethodContainer,
@@ -10,14 +10,14 @@ from src.application.shared.utils.plot_function import plot_function
 from django.http import HttpRequest, HttpResponse
 
 
-class RegulaFalsiView(TemplateView):
-    template_name = "regula_falsi.html"
+class FixedPointView(TemplateView):
+    template_name = "fixed_point.html"
 
     @inject
     def __init__(
         self,
-        method_service: IntervalMethod = Provide[
-            NumericalMethodContainer.regula_falsi_service
+        method_service: IterativeMethod = Provide[
+            NumericalMethodContainer.fixed_point_service
         ],
         **kwargs
     ):
@@ -31,20 +31,20 @@ class RegulaFalsiView(TemplateView):
 
         template_data = {}
 
-        interval_a = float(request.POST.get("interval_a"))
-        interval_b = float(request.POST.get("interval_b"))
+        x0 = float(request.POST.get("x0"))
         tolerance = float(request.POST.get("tolerance"))
         max_iterations = int(request.POST.get("max_iterations"))
-        function_f = request.POST.get("function_f")
         precision = int(request.POST.get("precision"))
+        function_f = request.POST.get("function_f")
+        function_g = request.POST.get("function_g")
 
         method_response = self.method_service.solve(
-            interval_a=interval_a,
-            interval_b=interval_b,
+            x0=x0,
             tolerance=tolerance,
             max_iterations=max_iterations,
-            function_f=function_f,
             precision=precision,
+            function_f=function_f,
+            function_g=function_g,
         )
 
         if method_response["is_successful"]:
