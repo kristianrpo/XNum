@@ -39,7 +39,12 @@ class RegulaFalsiView(TemplateView):
         precision = int(request.POST.get("precision"))
 
         method_response = self.method_service.solve(
-            interval_a, interval_b, tolerance, max_iterations, function_f, precision
+            interval_a=interval_a,
+            interval_b=interval_b,
+            tolerance=tolerance,
+            max_iterations=max_iterations,
+            function_f=function_f,
+            precision=precision,
         )
 
         if method_response["is_successful"]:
