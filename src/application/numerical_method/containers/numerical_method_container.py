@@ -6,9 +6,11 @@ from src.application.numerical_method.services.regula_falsi_service import (
 from src.application.numerical_method.services.fixed_point_service import (
     FixedPointService,
 )
+from src.application.numerical_method.services.jacobi_service import JacobiService
 
 
 class NumericalMethodContainer(containers.DeclarativeContainer):
     bisection_service = providers.Factory(BisectionService)
     regula_falsi_service = providers.Factory(RegulaFalsiService)
     fixed_point_service = providers.Factory(FixedPointService)
+    jacobi_service = providers.Factory(JacobiService)

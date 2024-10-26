@@ -99,23 +99,23 @@
   </section>
 
   <section id="systems-section">
-    <h2 class="font-weight-bold">Soluciones numéricas a sistemas de ecuaciones</h2>
+    <h2 class="font-weight-bold">Soluciones numéricas a sistemas de ecuaciones (SNSE)</h2>
     <p class="text-secondary">Explora métodos numéricos que permiten resolver sistemas de ecuaciones lineales</p>
     <div class="cards-container center-cards">
       <div class="row">
         <div class="col">
-          <a class="card no-border" href="#">
-            <img src="{% static 'img/home/Gauss-Seidel.webp' %}" class="card-img-top" alt="Gauss-Seidel" />
+          <a class="card no-border" href="{% url 'numerical_method:jacobi' %}">
+            <img src="{% static 'img/home/jacobi.webp' %}" class="card-img-top" alt="Método de Jacobi" />
             <div class="card-body">
-              <p class="card-text text-center">Método de Gauss-Seidel</p>
+              <p class="card-text text-center">Método de Jacobi</p>
             </div>
           </a>
         </div>
         <div class="col">
           <a class="card no-border" href="#">
-            <img src="{% static 'img/home/jacobi.webp' %}" class="card-img-top" alt="Método de Jacobi" />
+            <img src="{% static 'img/home/Gauss-Seidel.webp' %}" class="card-img-top" alt="Gauss-Seidel" />
             <div class="card-body">
-              <p class="card-text text-center">Método de Jacobi</p>
+              <p class="card-text text-center">Método de Gauss-Seidel</p>
             </div>
           </a>
         </div>

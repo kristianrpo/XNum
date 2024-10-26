@@ -2,6 +2,7 @@ from django.urls import path
 from .views.bisection_view import BisectionView
 from .views.regula_falsi_view import RegulaFalsiView
 from .views.fixed_point_view import FixedPointView
+from .views.jacobi_view import JacobiView
 
 app_name = "numerical_method"
 urlpatterns = [
@@ -20,4 +21,9 @@ urlpatterns = [
         FixedPointView.as_view(),
         name="fixed_point",
     ),
+    path(
+        "jacobi/",
+        JacobiView.as_view(),
+        name="jacobi",
+    )
 ]

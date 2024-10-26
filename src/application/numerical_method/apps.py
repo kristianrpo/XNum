@@ -13,5 +13,6 @@ class NumericalMethodConfig(AppConfig):
                 "src.application.numerical_method.views.bisection_view",
                 "src.application.numerical_method.views.regula_falsi_view",
                 "src.application.numerical_method.views.fixed_point_view",
+                "src.application.numerical_method.views.fixed_point_view",
             ]
         )
