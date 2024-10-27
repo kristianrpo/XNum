@@ -25,22 +25,18 @@ class JacobiService(MatrixMethod):
         b = np.array(b)
         x0 = np.array(x0)
         
-        # Inicialización de variables
-        D = np.diag(np.diag(A))
-        L_plus_U = A - D
-        T = np.dot(np.linalg.inv(D), L_plus_U)
-        C = np.dot(np.linalg.inv(D), b)
-        
+        n = len(b)
+        x1 = np.zeros_like(x0)
         current_error = tolerance + 1
         current_iteration = 0
         table = {}
-        
-        # Radio espectral
-        spectral_radius = max(abs(np.linalg.eigvals(T)))
-        
-        # Iteración de Jacobi
+
         while current_error > tolerance and current_iteration < max_iterations:
-            x1 = np.dot(T, x0) + C
+            # Iteración de Jacobi
+            for i in range(n):
+                sum_others = np.dot(A[i, :i], x0[:i]) + np.dot(A[i, i+1:], x0[i+1:])
+                x1[i] = (b[i] - sum_others) / A[i, i]
+
             current_error = np.linalg.norm(x1 - x0, ord=np.inf)
             
             # Guardamos la información de la iteración actual
@@ -51,7 +47,7 @@ class JacobiService(MatrixMethod):
             }
             
             # Preparación para la siguiente iteración
-            x0 = x1
+            x0 = x1.copy()
             current_iteration += 1
         
         # Verificación de éxito o fallo tras las iteraciones
@@ -61,8 +57,7 @@ class JacobiService(MatrixMethod):
                 "table": table,
                 "is_successful": True,
                 "have_solution": True,
-                "solution": x0.tolist(),
-                "spectral_radius": spectral_radius,
+                "solution": x1.tolist(),
             }
         elif current_iteration >= max_iterations:
             return {
@@ -70,8 +65,7 @@ class JacobiService(MatrixMethod):
                 "table": table,
                 "is_successful": True,
                 "have_solution": False,
-                "solution": x0.tolist(),
-                "spectral_radius": spectral_radius,
+                "solution": x1.tolist(),
             }
         else:
             return {
@@ -80,7 +74,6 @@ class JacobiService(MatrixMethod):
                 "is_successful": False,
                 "have_solution": False,
                 "solution": [],
-                "spectral_radius": spectral_radius,
             }
 
     def _validate_input(self, A, b, x0):
