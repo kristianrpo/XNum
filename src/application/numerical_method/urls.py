@@ -3,6 +3,7 @@ from .views.bisection_view import BisectionView
 from .views.regula_falsi_view import RegulaFalsiView
 from .views.fixed_point_view import FixedPointView
 from .views.jacobi_view import JacobiView
+from .views.gauss_seidel_view import GaussSeidelView
 
 app_name = "numerical_method"
 urlpatterns = [
@@ -25,5 +26,10 @@ urlpatterns = [
         "jacobi/",
         JacobiView.as_view(),
         name="jacobi",
+    ),
+    path(
+        "gauss-seidel/",
+        GaussSeidelView.as_view(),
+        name="gauss_seidel",
     )
 ]
