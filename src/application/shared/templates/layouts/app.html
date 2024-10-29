@@ -42,6 +42,20 @@
                 <a class="dropdown-item" href="#">Raíces múltiples #2</a>
               </div>
             </li>
+            <li class="nav-item dropdown ml-auto">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownSNSE" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                SNSE
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownSNSE">
+                <p class="text-center mx-1">
+                  <b>Soluciones numéricas de sistemas de ecuaciones</b>
+                </p>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'numerical_method:jacobi' %}">Método de Jacobi</a>
+                <a class="dropdown-item" href="#">Método de Gauss-Seidel</a>
+                <a class="dropdown-item" href="#">Método SOR</a>
+              </div>
+            </li>
           </ul>
         </div>
       </nav>
@@ -57,7 +71,7 @@
       <div class="text-center p-2">
         <img src="{% static 'img/logo.png' %}" width="200" class="d-inline-block align-top" alt="" />
         <br />
-        <p class="mt-2">© 2024 Kristian Restrepo Osorio, David Lopera. Todos los derechos reservados.</p>
+        <p class="mt-2">© 2024 Kristian Restrepo Osorio, David Lopera, Santiago Palacio Garcia. Todos los derechos reservados.</p>
       </div>
     </footer>
 
