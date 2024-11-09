@@ -1,18 +1,19 @@
 import numpy as np
 from src.application.numerical_method.interfaces.matrix_method import MatrixMethod
 
-class JacobiService(MatrixMethod):
+class SORService(MatrixMethod):
     def solve(
         self,
         A: list[list[float]],       # Matriz de coeficientes
         b: list[float],             # Vector de términos independientes
         x0: list[float],            # Vector inicial de aproximación
         tolerance: float,           # Tolerancia para el error
-        max_iterations: int         # Número máximo de iteraciones
+        max_iterations: int,        # Número máximo de iteraciones
+        w: float                    # Factor de relajación
     ) -> dict:
         
         # Validación de entradas
-        if not self._validate_input(A, b, x0):
+        if not self.validate_input(A, b, x0):
             return {
                 "message_method": "Error: Las entradas deben ser numéricas y A debe ser cuadrada de hasta 6x6.",
                 "table": {},
@@ -26,39 +27,42 @@ class JacobiService(MatrixMethod):
         x0 = np.array(x0)
         
         n = len(b)
-        x1 = np.zeros_like(x0)
-        current_error = tolerance + 1
-        current_iteration = 0
+        x = x0.copy()
         table = {}
 
         # Inicialización de matrices para el cálculo de T y C
         D = np.diag(np.diag(A))
-        L = np.tril(A, -1)
-        U = np.triu(A, 1)
+        L = -np.tril(A, -1)
+        U = -np.triu(A, 1)
         
         # Cálculo de la matriz de iteración T para el método SOR
-        T = np.linalg.inv(D).dot(L+U)
+        T = np.linalg.inv(D - w * L) @ ((1 - w) * D + w * U)
         spectral_radius = max(abs(np.linalg.eigvals(T)))
 
-        while current_error > tolerance and current_iteration < max_iterations:
-            # Iteración de Jacobi
-            for i in range(n):
-                sum_others = np.dot(A[i, :i], x0[:i]) + np.dot(A[i, i+1:], x0[i+1:])
-                x1[i] = (b[i] - sum_others) / A[i, i]
+        current_error = tolerance + 1
+        current_iteration = 0
 
-            current_error = np.linalg.norm(x1 - x0, ord=np.inf)
-            
-            # Guardamos la información de la iteración actual
+        # Iteración SOR
+        while current_error > tolerance and current_iteration < max_iterations:
+            x_new = x.copy()
+            for i in range(n):
+                sum_others = np.dot(A[i, :i], x_new[:i]) + np.dot(A[i, i+1:], x[i+1:])
+                x_new[i] = (1 - w) * x[i] + (w / A[i, i]) * (b[i] - sum_others)
+
+            # Calcular el error como norma infinito de la diferencia
+            current_error = np.linalg.norm(x_new - x, ord=np.inf)
+
+            # Guardar información en la tabla para la iteración actual
             table[current_iteration + 1] = {
                 "iteration": current_iteration + 1,
-                "X": x1.tolist(),
+                "X": x_new.tolist(),
                 "Error": current_error,
             }
-            
-            # Preparación para la siguiente iteración
-            x0 = x1.copy()
+
+            # Preparar para la siguiente iteración
+            x = x_new
             current_iteration += 1
-        
+
         # Verificación de éxito o fallo tras las iteraciones
         if current_error <= tolerance:
             return {
@@ -66,16 +70,16 @@ class JacobiService(MatrixMethod):
                 "table": table,
                 "is_successful": True,
                 "have_solution": True,
-                "solution": x1.tolist(),
+                "solution": x.tolist(),
                 "spectral_radius": spectral_radius,
             }
         elif current_iteration >= max_iterations:
             return {
-                "message_method": f"El método funcionó correctamente, pero no se encontró una solución en {max_iterations} iteraciones y el radio espectral es de = {spectral_radius}.",
+                "message_method": f"El método funcionó correctamente, pero no se encontró una solución en {max_iterations} iteraciones.",
                 "table": table,
                 "is_successful": True,
                 "have_solution": False,
-                "solution": x1.tolist(),
+                "solution": x.tolist(),
                 "spectral_radius": spectral_radius,
             }
         else:
@@ -85,9 +89,10 @@ class JacobiService(MatrixMethod):
                 "is_successful": False,
                 "have_solution": False,
                 "solution": [],
+                "spectral_radius": spectral_radius,
             }
 
-    def _validate_input(self, A, b, x0):
+    def validate_input(self, A, b, x0):
         # Validar que A es cuadrada y de máximo tamaño 6x6
         if len(A) > 6 or any(len(row) != len(A) for row in A):
             return False
