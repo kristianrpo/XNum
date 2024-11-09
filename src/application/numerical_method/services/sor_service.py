@@ -36,7 +36,7 @@ class SORService(MatrixMethod):
         U = -np.triu(A, 1)
         
         # Cálculo de la matriz de iteración T para el método SOR
-        T = np.linalg.inv(D - w * L) @ ((1 - w) * D + w * U)
+        T = np.linalg.inv(D - w * L).dot((1 - w) * D + w * U)
         spectral_radius = max(abs(np.linalg.eigvals(T)))
 
         current_error = tolerance + 1
@@ -75,7 +75,7 @@ class SORService(MatrixMethod):
             }
         elif current_iteration >= max_iterations:
             return {
-                "message_method": f"El método funcionó correctamente, pero no se encontró una solución en {max_iterations} iteraciones.",
+                "message_method": f"El método funcionó correctamente, pero no se encontró una solución en {max_iterations} iteraciones y el radio espectral es de = {spectral_radius}.",
                 "table": table,
                 "is_successful": True,
                 "have_solution": False,
