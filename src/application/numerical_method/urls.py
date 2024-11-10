@@ -4,6 +4,7 @@ from .views.regula_falsi_view import RegulaFalsiView
 from .views.fixed_point_view import FixedPointView
 from .views.jacobi_view import JacobiView
 from .views.gauss_seidel_view import GaussSeidelView
+from .views.sor_view import SORView
 
 app_name = "numerical_method"
 urlpatterns = [
@@ -31,5 +32,10 @@ urlpatterns = [
         "gauss-seidel/",
         GaussSeidelView.as_view(),
         name="gauss_seidel",
+    ),
+    path(
+        "sor/",
+        SORView.as_view(),
+        name="sor",
     )
 ]
