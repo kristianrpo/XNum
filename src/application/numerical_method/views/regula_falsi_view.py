@@ -51,7 +51,7 @@ class RegulaFalsiView(TemplateView):
             plot_function(
                 function_f,
                 method_response["have_solution"],
-                method_response["root"],
+                [(method_response["root"], 0.0)],
             )
 
         template_data = template_data | method_response

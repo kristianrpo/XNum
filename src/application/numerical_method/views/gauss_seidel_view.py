@@ -6,6 +6,7 @@ from src.application.numerical_method.containers.numerical_method_container impo
 from dependency_injector.wiring import inject
 from django.http import HttpRequest, HttpResponse
 
+
 class GaussSeidelView(TemplateView):
     template_name = "gauss_seidel.html"
 
@@ -14,7 +15,9 @@ class GaussSeidelView(TemplateView):
         super().__init__(**kwargs)
         self.method_service = NumericalMethodContainer.gauss_seidel_service()
 
-    def post(self, request: HttpRequest, *args: object, **kwargs: object) -> HttpResponse:
+    def post(
+        self, request: HttpRequest, *args: object, **kwargs: object
+    ) -> HttpResponse:
         context = self.get_context_data()
 
         try:
@@ -22,7 +25,8 @@ class GaussSeidelView(TemplateView):
             matrix_a_raw = request.POST.get("matrix_a", "")
             A = [
                 [float(num) for num in row.strip().split()]
-                for row in matrix_a_raw.split(';') if row.strip()
+                for row in matrix_a_raw.split(";")
+                if row.strip()
             ]
 
             # Validación y conversión del vector b

@@ -6,6 +6,7 @@ from src.application.numerical_method.containers.numerical_method_container impo
 from dependency_injector.wiring import inject
 from django.http import HttpRequest, HttpResponse
 
+
 class SORView(TemplateView):
     template_name = "sor.html"
 
@@ -14,7 +15,9 @@ class SORView(TemplateView):
         super().__init__(**kwargs)
         self.method_service = NumericalMethodContainer.sor_service()
 
-    def post(self, request: HttpRequest, *args: object, **kwargs: object) -> HttpResponse:
+    def post(
+        self, request: HttpRequest, *args: object, **kwargs: object
+    ) -> HttpResponse:
         context = self.get_context_data()
 
         # Obtener y validar valores desde el formulario
@@ -23,7 +26,8 @@ class SORView(TemplateView):
             matrix_a_raw = request.POST.get("matrix_a", "")
             A = [
                 [float(num) for num in row.strip().split()]
-                for row in matrix_a_raw.split(';') if row.strip()
+                for row in matrix_a_raw.split(";")
+                if row.strip()
             ]
 
             # Validación y conversión del vector b
@@ -68,13 +72,13 @@ class SORView(TemplateView):
         if not method_response["is_successful"]:
             context["template_data"] = method_response
             return self.render_to_response(context)
-        
-         # Agregar los índices y el valor de w a template_data si el método es exitoso
+
+        # Agregar los índices y el valor de w a template_data si el método es exitoso
         if method_response["is_successful"]:
             index = list(range(1, len(A) + 1))  # Índices de X
             method_response["index"] = index
             method_response["relaxation_factor"] = w
-        
+
         # Verificación de éxito y almacenamiento de la respuesta
         context["template_data"] = method_response
 
