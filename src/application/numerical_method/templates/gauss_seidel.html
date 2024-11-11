@@ -2,61 +2,61 @@
 {% load static %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/components/input_guidelines_card.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/components/input_guidelines_card.css' %}" />
 {% endblock %}
 
 {% block title %}
-Método de Gauss-Seidel
+    Método de Gauss-Seidel
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1 class="font-weight-bold mb-4 text-center">Método de Gauss-Seidel</h1>
-    <div class="row">
-        <div class="col-md-6">
-            {% include 'components/input_guidelines_card.html' %}
-        </div>
-        <div class="col-md-6">
-            <form method="POST" action="{% url 'numerical_method:gauss_seidel' %}">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="matrix_a">Ingrese matriz de coeficientes A (separar filas por punto y coma y columnas
-                        por espacio):</label>
-                    <input type="text" class="form-control" id="matrix_a" name="matrix_a"
-                        placeholder="Ejemplo: '45 13 -4 8; -5 -28 4 -14; 9 15 63 -7; 2 3 -8 -42'" required />
-                </div>
-                <div class="form-group">
-                    <label for="vector_b">Ingrese vector b (separar elementos por espacio):</label>
-                    <input type="text" class="form-control" id="vector_b" name="vector_b"
-                        placeholder="Ejemplo: '-25 82 75 -43'" required />
-                </div>
-                <div class="form-group">
-                    <label for="initial_guess">Ingrese vector inicial x0 (separar elementos por espacio):</label>
-                    <input type="text" class="form-control" id="initial_guess" name="initial_guess"
-                        placeholder="Ejemplo: '2 2 2 2'" required />
-                    <small class="form-text text-muted">Nota: El vector inicial x0 puede ser cualquier conjunto de
-                        valores. Si tienes una estimación cercana a la solución esperada, te recomendamos usarla para
-                        acelerar la convergencia.</small>
-                </div>
-                <div class="form-group">
-                    <label for="tolerance">Tolerancia:</label>
-                    <input type="number" class="form-control" id="tolerance" name="tolerance"
-                        placeholder="Ingresar tolerancia" step="any" required />
-                </div>
-                <div class="form-group">
-                    <label for="max_iterations">Máximo número de iteraciones:</label>
-                    <input type="number" class="form-control" id="max_iterations" name="max_iterations"
-                        placeholder="Ingresar número de iteraciones" required />
-                </div>
-                <button type="submit" class="btn btn-dark">Encontrar solución del sistema</button>
-            </form>
-        </div>
-        {% if template_data %}
-            {% include 'components/alert_message.html' with message=template_data.message_method title='Información proporcionada por el método' %}
-            {% if template_data.is_successful %}
-                {% include 'components/result_tables/result_table_2_SNSE.html' with table=template_data.table %}
+    <div class="container">
+        <h1 class="font-weight-bold mb-4 text-center">Método de Gauss-Seidel</h1>
+        <div class="row">
+            <div class="col-md-6">
+                {% include 'components/input_guidelines_card.html' %}
+            </div>
+            <div class="col-md-6">
+                <form method="POST" action="{% url 'numerical_method:gauss_seidel' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="matrix_a">Ingrese matriz de coeficientes A (separar filas por punto y coma y columnas
+                            por espacio):</label>
+                        <input type="text" class="form-control" id="matrix_a" name="matrix_a"
+                               placeholder="Ejemplo: '45 13 -4 8; -5 -28 4 -14; 9 15 63 -7; 2 3 -8 -42'" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="vector_b">Ingrese vector b (separar elementos por espacio):</label>
+                        <input type="text" class="form-control" id="vector_b" name="vector_b"
+                               placeholder="Ejemplo: '-25 82 75 -43'" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="initial_guess">Ingrese vector inicial x0 (separar elementos por espacio):</label>
+                        <input type="text" class="form-control" id="initial_guess" name="initial_guess"
+                               placeholder="Ejemplo: '2 2 2 2'" required />
+                        <small class="form-text text-muted">Nota: El vector inicial x0 puede ser cualquier conjunto de
+                            valores. Si tienes una estimación cercana a la solución esperada, te recomendamos usarla para
+                            acelerar la convergencia.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="tolerance">Tolerancia:</label>
+                        <input type="number" class="form-control" id="tolerance" name="tolerance"
+                               placeholder="Ingresar tolerancia" step="any" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="max_iterations">Máximo número de iteraciones:</label>
+                        <input type="number" class="form-control" id="max_iterations" name="max_iterations"
+                               placeholder="Ingresar número de iteraciones" required />
+                    </div>
+                    <button type="submit" class="btn btn-dark">Encontrar solución del sistema</button>
+                </form>
+            </div>
+            {% if template_data %}
+                {% include 'components/alert_message.html' with message=template_data.message_method title='Información proporcionada por el método' %}
+                {% if template_data.is_successful %}
+                    {% include 'components/result_tables/result_table_2_SNSE.html' with table=template_data.table %}
+                {% endif %}
             {% endif %}
-        {% endif %}
+        </div>
     </div>
-</div>
 {% endblock %}
