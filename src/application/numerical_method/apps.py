@@ -13,6 +13,9 @@ class NumericalMethodConfig(AppConfig):
                 "src.application.numerical_method.views.bisection_view",
                 "src.application.numerical_method.views.regula_falsi_view",
                 "src.application.numerical_method.views.fixed_point_view",
-                "src.application.numerical_method.views.fixed_point_view",
+                "src.application.numerical_method.views.jacobi_view",
+                "src.application.numerical_method.views.gauss_seidel_view",
+                "src.application.numerical_method.views.sor_view",
+                "src.application.numerical_method.views.vandermonde_view",
             ]
         )
