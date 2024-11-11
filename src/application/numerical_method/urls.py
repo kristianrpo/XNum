@@ -5,6 +5,7 @@ from .views.fixed_point_view import FixedPointView
 from .views.jacobi_view import JacobiView
 from .views.gauss_seidel_view import GaussSeidelView
 from .views.sor_view import SORView
+from .views.vandermonde_view import VandermondeView
 
 app_name = "numerical_method"
 urlpatterns = [
@@ -37,5 +38,10 @@ urlpatterns = [
         "sor/",
         SORView.as_view(),
         name="sor",
-    )
+    ),
+    path(
+        "vandermonde/",
+        VandermondeView.as_view(),
+        name="vandermonde",
+    ),
 ]
