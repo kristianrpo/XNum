@@ -43,7 +43,7 @@ class VandermondeView(TemplateView):
                 "have_solution": False,
             }
             template_data = template_data | error_response
-            context["template_data"] = response_validation
+            context["template_data"] = template_data
             return self.render_to_response(context)
 
         x_values = response_validation[0]

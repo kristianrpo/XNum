@@ -31,10 +31,10 @@ def plot_function(
     # Graficar la función en el rango ajustado
     plt.plot(x_vals, y_vals, color="#a18262", label="f(x)")
 
-    # Graficar cada punto de intersección proporcionado
-    for x, y in points:
-        plt.plot(x, y, marker="o", color="#f7dc6f")
-        plt.text(x, y, f"({x}, {y})", fontsize=9, verticalalignment="bottom")
+    if have_solution:
+        for x, y in points:
+            plt.plot(x, y, marker="o", color="#f7dc6f")
+            plt.text(x, y, f"({x}, {y})", fontsize=9, verticalalignment="bottom")
 
     # Ajustar los límites de los ejes para el recuadro de la grafica como tal
     plt.xlim(min_x - 3, max_x + 3)
