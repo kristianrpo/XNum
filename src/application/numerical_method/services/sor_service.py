@@ -1,17 +1,18 @@
 import numpy as np
 from src.application.numerical_method.interfaces.matrix_method import MatrixMethod
 
+
 class SORService(MatrixMethod):
     def solve(
         self,
-        A: list[list[float]],       # Matriz de coeficientes
-        b: list[float],             # Vector de términos independientes
-        x0: list[float],            # Vector inicial de aproximación
-        tolerance: float,           # Tolerancia para el error
-        max_iterations: int,        # Número máximo de iteraciones
-        w: float                    # Factor de relajación
+        A: list[list[float]],  # Matriz de coeficientes
+        b: list[float],  # Vector de términos independientes
+        x0: list[float],  # Vector inicial de aproximación
+        tolerance: float,  # Tolerancia para el error
+        max_iterations: int,  # Número máximo de iteraciones
+        w: float,  # Factor de relajación
     ) -> dict:
-        
+
         # Validación de entradas
         if not self.validate_input(A, b, x0):
             return {
@@ -21,11 +22,11 @@ class SORService(MatrixMethod):
                 "have_solution": False,
                 "solution": [],
             }
-        
+
         A = np.array(A)
         b = np.array(b)
         x0 = np.array(x0)
-        
+
         n = len(b)
         x = x0.copy()
         table = {}
@@ -34,7 +35,7 @@ class SORService(MatrixMethod):
         D = np.diag(np.diag(A))
         L = -np.tril(A, -1)
         U = -np.triu(A, 1)
-        
+
         # Cálculo de la matriz de iteración T para el método SOR
         T = np.linalg.inv(D - w * L).dot((1 - w) * D + w * U)
         spectral_radius = max(abs(np.linalg.eigvals(T)))
@@ -46,7 +47,9 @@ class SORService(MatrixMethod):
         while current_error > tolerance and current_iteration < max_iterations:
             x_new = x.copy()
             for i in range(n):
-                sum_others = np.dot(A[i, :i], x_new[:i]) + np.dot(A[i, i+1:], x[i+1:])
+                sum_others = np.dot(A[i, :i], x_new[:i]) + np.dot(
+                    A[i, i + 1 :], x[i + 1 :]
+                )
                 x_new[i] = (1 - w) * x[i] + (w / A[i, i]) * (b[i] - sum_others)
 
             # Calcular el error como norma infinito de la diferencia
