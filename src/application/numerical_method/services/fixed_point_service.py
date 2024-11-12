@@ -46,7 +46,7 @@ class FixedPointService(IterativeMethod):
                 f = eval(function_f)
             except Exception as e:
                 return {
-                    "message_method": f"Error en la función ingresada, la descripción de este error fué: {str(e)}. Por favor, verifique que las funciónes sean correctas (que use correctamente las funciones de Python, operadores, funciones math, etc., y se utilice la variable x para las mismas). Adicionalmente verifique su g(x)",
+                    "message_method": f"El x evaluado en g(x) no pertenece al dominio de la función, la descripción de este error fué: {str(e)}.",
                     "table": {},
                     "is_successful": False,
                     "have_solution": False,
@@ -117,3 +117,32 @@ class FixedPointService(IterativeMethod):
             "have_solution": False,
             "root": 0.0,
         }
+    
+    def validate_input(
+        self,
+        x0: float,
+        tolerance: float,
+        max_iterations: int,
+        function_f: str,
+        **kwargs
+    ) -> str | bool:
+        
+        function_g = kwargs.get("function_g")
+
+        # Validación de los parámetros de entrada tolerancia positiva
+        if not isinstance(tolerance, (int, float)) or tolerance <= 0:
+            return "La tolerancia debe ser un número positivo"
+
+        # Validación de los parámetros de entrada maximo numero de iteraciones positivo
+        if not isinstance(max_iterations, int) or max_iterations <= 0:
+            return "El máximo número de iteraciones debe ser un entero positivo."
+        
+        # Validación de las funciones ingresadas
+        try:
+            x = x0
+            g = eval(function_g)
+
+            x = g
+            f = eval(function_f)
+        except Exception as e:
+            return f"Error en la función ingresada, la descripción de este error fué: {str(e)}. Por favor, verifique que las funciónes sean correctas (que use correctamente las funciones de Python, operadores, funciones math, etc., y se utilice la variable x para las mismas). Adicionalmente verifique su g(x)."

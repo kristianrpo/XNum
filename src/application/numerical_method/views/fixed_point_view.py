@@ -38,6 +38,26 @@ class FixedPointView(TemplateView):
         function_f = request.POST.get("function_f")
         function_g = request.POST.get("function_g")
 
+        response_validation = self.method_service.validate_input(
+            x0=x0, 
+            tolerance=tolerance, 
+            max_iterations=max_iterations, 
+            function_f=function_f, 
+            function_g=function_g,
+        )
+
+        if isinstance(response_validation, str):
+            error_response = {
+                "message_method": response_validation,
+                "table": {},
+                "is_successful": False,
+                "have_solution": False,
+                "root": 0.0,
+            }
+            template_data = template_data | error_response
+            context["template_data"] = template_data
+            return self.render_to_response(context)
+
         method_response = self.method_service.solve(
             x0=x0,
             tolerance=tolerance,
