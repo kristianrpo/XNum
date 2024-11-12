@@ -22,18 +22,6 @@ class GaussSeidelService(
         max_iterations: int,  # Número máximo de iteraciones permitidas para evitar bucles infinitos.
     ) -> dict:  # Indica que el método devolverá un diccionario.
 
-        # Validación de entradas
-        if not self._validate_input(
-            A, b, x0
-        ):  # Llama al método de validación de entradas. Si falla, retorna un mensaje de error.
-            return {
-                "message_method": "Error: Las entradas deben ser numéricas y A debe ser cuadrada de hasta 6x6.",  # Mensaje de error para el usuario.
-                "table": {},  # Inicializa una tabla vacía para registrar los resultados.
-                "is_successful": False,  # Indica que la operación no fue exitosa.
-                "have_solution": False,  # Indica que no se encontró una solución.
-                "solution": [],  # Lista vacía para la solución.
-            }
-
         # Convierte las listas de entrada a arrays de NumPy para facilitar cálculos.
         A = np.array(A)  # Convierte la matriz de coeficientes en un array de NumPy.
         b = np.array(
@@ -90,7 +78,6 @@ class GaussSeidelService(
                 x1.copy()
             )  # Actualiza x0 con el nuevo valor de x1 para la próxima iteración.
             current_iteration += 1  # Incrementa el contador de iteraciones.
-
         # Verificación de éxito o fallo tras las iteraciones
         if (
             current_error <= tolerance
@@ -116,37 +103,46 @@ class GaussSeidelService(
             return {
                 "message_method": f"El método falló al intentar aproximar una solución",  # Mensaje de error informando que no se pudo encontrar solución.
                 "table": table,  # Retorna la tabla de iteraciones.
-                "is_successful": False,  # Indica que la operación no fue exitosa.
+                "is_successful": True,  
                 "have_solution": False,  # Indica que no se encontró solución.
                 "solution": [],  # Lista vacía para la solución.
             }
 
-    def _validate_input(
-        self, A, b, x0
-    ):  # Define un método privado para validar las entradas.
-        # Validar que A es cuadrada y de máximo tamaño 6x6
-        if len(A) > 6 or any(
-            len(row) != len(A) for row in A
-        ):  # Comprueba que A no exceda 6 filas y que todas las filas tengan el mismo número de columnas.
-            return False  # Si falla, retorna False.
-        # Validar que b y x0 tengan tamaños compatibles con A
-        if len(b) != len(A) or len(x0) != len(
-            A
-        ):  # Verifica que los tamaños de b y x0 coincidan con el número de filas de A.
-            return False  # Si falla, retorna False.
-        # Validar que todos los elementos sean numéricos
+    def validate_input(
+        self,
+        matrix_a_raw: str,
+        vector_b_raw: str,
+        initial_guess_raw: str,
+        tolerance: float,
+        max_iterations: int,
+    ) -> str | list:
+        # Validación de los parámetros de entrada tolerancia positiva
+        if not isinstance(tolerance, (int, float)) or tolerance <= 0:
+            return "La tolerancia debe ser un número positivo"
+
+        # Validación de los parámetros de entrada maximo numero de iteraciones positivo
+        if not isinstance(max_iterations, int) or max_iterations <= 0:
+            return "El máximo número de iteraciones debe ser un entero positivo."
+        
+        # Validación de las entradas numéricas
         try:
-            _ = np.array(
-                A, dtype=float
-            )  # Intenta convertir A a un array de NumPy de tipo float.
-            _ = np.array(
-                b, dtype=float
-            )  # Intenta convertir b a un array de NumPy de tipo float.
-            _ = np.array(
-                x0, dtype=float
-            )  # Intenta convertir x0 a un array de NumPy de tipo float.
-        except (
-            ValueError
-        ):  # Si ocurre un error durante la conversión (elementos no numéricos).
-            return False  # Retorna False.
-        return True  # Si todas las validaciones son exitosas, retorna True.
+            A = [
+                [float(num) for num in row.strip().split()]
+                for row in matrix_a_raw.split(";")
+                if row.strip()
+            ]
+
+            b = [float(num) for num in vector_b_raw.strip().split()]
+            x0 = [float(num) for num in initial_guess_raw.strip().split()]
+        except ValueError:
+            return "Todas las entradas deben ser numéricas."
+        
+        # Validar que A es cuadrada y de máximo tamaño 6x6
+        if len(A) > 6 or any(len(row) != len(A) for row in A):
+            return "La matriz A debe ser cuadrada de hasta 6x6."
+        
+        # Validar que b y x0 tengan tamaños compatibles con A
+        if len(b) != len(A) or len(x0) != len(A):
+            return "El vector b y x0 deben ser compatibles con el tamaño de la matriz A."
+
+        return [A,b,x0]

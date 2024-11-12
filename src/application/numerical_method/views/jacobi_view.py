@@ -62,16 +62,8 @@ class JacobiView(TemplateView):
             max_iterations=max_iterations,
         )
 
-        # Si el servicio retorna un error de validación, mostrarlo en la página
-        if not method_response["is_successful"]:
-            context["template_data"] = method_response
-            return self.render_to_response(context)
-
         # Verificación de éxito y almacenamiento de la respuesta
-        if method_response["is_successful"]:
-            index = list(range(1, len(A) + 1))  # Índices de X
-            method_response["index"] = index
-
-        context["template_data"] = method_response
-
+        template_data["indexes"] = list(range(1, len(A) + 1))
+        template_data = template_data | method_response
+        context["template_data"] = template_data
         return self.render_to_response(context)
