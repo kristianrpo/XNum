@@ -10,18 +10,10 @@ class SORService(MatrixMethod):
         x0: list[float],  # Vector inicial de aproximación
         tolerance: float,  # Tolerancia para el error
         max_iterations: int,  # Número máximo de iteraciones
-        w: float,  # Factor de relajación
+        **kwargs,
     ) -> dict:
-
-        # Validación de entradas
-        if not self.validate_input(A, b, x0):
-            return {
-                "message_method": "Error: Las entradas deben ser numéricas y A debe ser cuadrada de hasta 6x6.",
-                "table": {},
-                "is_successful": False,
-                "have_solution": False,
-                "solution": [],
-            }
+        
+        w = kwargs.get("w")
 
         A = np.array(A)
         b = np.array(b)
@@ -95,18 +87,48 @@ class SORService(MatrixMethod):
                 "spectral_radius": spectral_radius,
             }
 
-    def validate_input(self, A, b, x0):
+    def validate_input(
+        self,
+        matrix_a_raw: str,
+        vector_b_raw: str,
+        initial_guess_raw: str,
+        tolerance: float,
+        max_iterations: int,
+        **kwargs,
+    ) -> str | list:
+        
+        w = kwargs.get("w")
+        
+        # Validación de los parámetros de entrada tolerancia positiva
+        if not isinstance(tolerance, (int, float)) or tolerance <= 0:
+            return "La tolerancia debe ser un número positivo"
+
+        # Validación de los parámetros de entrada maximo numero de iteraciones positivo
+        if not isinstance(max_iterations, int) or max_iterations <= 0:
+            return "El máximo número de iteraciones debe ser un entero positivo."
+        
+        # Validación de las entradas numéricas
+        try:
+            A = [
+                [float(num) for num in row.strip().split()]
+                for row in matrix_a_raw.split(";")
+                if row.strip()
+            ]
+
+            b = [float(num) for num in vector_b_raw.strip().split()]
+            x0 = [float(num) for num in initial_guess_raw.strip().split()]
+        except ValueError:
+            return "Todas las entradas deben ser numéricas."
+        
         # Validar que A es cuadrada y de máximo tamaño 6x6
         if len(A) > 6 or any(len(row) != len(A) for row in A):
-            return False
+            return "La matriz A debe ser cuadrada de hasta 6x6."
+        
         # Validar que b y x0 tengan tamaños compatibles con A
         if len(b) != len(A) or len(x0) != len(A):
-            return False
-        # Validar que todos los elementos sean numéricos
-        try:
-            _ = np.array(A, dtype=float)
-            _ = np.array(b, dtype=float)
-            _ = np.array(x0, dtype=float)
-        except ValueError:
-            return False
-        return True
+            return "El vector b y x0 deben ser compatibles con el tamaño de la matriz A."
+        
+        if w <= 0 or w >= 2:
+            return "El factor de relajación w debe estar en el rango (0, 2)."
+
+        return [A,b,x0]

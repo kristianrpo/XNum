@@ -10,6 +10,7 @@ class JacobiService(MatrixMethod):
         x0: list[float],  # Vector inicial de aproximación
         tolerance: float,  # Tolerancia para el error
         max_iterations: int,  # Número máximo de iteraciones
+        **kwargs,
     ) -> dict:
 
         A = np.array(A)
@@ -87,6 +88,7 @@ class JacobiService(MatrixMethod):
         initial_guess_raw: str,
         tolerance: float,
         max_iterations: int,
+        **kwargs,
     ) -> str | list:
         
         # Validación de los parámetros de entrada tolerancia positiva

@@ -10,6 +10,7 @@ class MatrixMethod(ABC):
         x0: list[float], 
         tolerance: float,  
         max_iterations: int,
+        **kwargs,
     ) -> dict:
         pass
     @abstractmethod
@@ -20,5 +21,6 @@ class MatrixMethod(ABC):
         initial_guess_raw: str,
         tolerance: float,
         max_iterations: int,
+        **kwargs,
     ) -> str | list:
         pass

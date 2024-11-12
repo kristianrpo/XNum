@@ -20,6 +20,7 @@ class GaussSeidelService(
         ],  # Vector inicial de aproximación, representado como una lista de números flotantes.
         tolerance: float,  # Tolerancia para el error en la aproximación.
         max_iterations: int,  # Número máximo de iteraciones permitidas para evitar bucles infinitos.
+        **kwargs,
     ) -> dict:  # Indica que el método devolverá un diccionario.
 
         # Convierte las listas de entrada a arrays de NumPy para facilitar cálculos.
@@ -115,6 +116,7 @@ class GaussSeidelService(
         initial_guess_raw: str,
         tolerance: float,
         max_iterations: int,
+        **kwargs,
     ) -> str | list:
         # Validación de los parámetros de entrada tolerancia positiva
         if not isinstance(tolerance, (int, float)) or tolerance <= 0:
