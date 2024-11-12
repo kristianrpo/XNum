@@ -13,3 +13,14 @@ class IterativeMethod(ABC):
         **kwargs,
     ) -> dict:
         pass
+    
+    @abstractmethod
+    def validate_input(
+        self,
+        x0: float,
+        tolerance: float,
+        max_iterations: int,
+        function_f: str,
+        **kwargs,
+    ) -> str | bool:
+        pass

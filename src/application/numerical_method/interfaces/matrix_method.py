@@ -1,13 +1,26 @@
 from abc import ABC, abstractmethod
 
+
 class MatrixMethod(ABC):
     @abstractmethod
     def solve(
         self,
-        A: list[list[float]],    # Matriz de coeficientes
-        b: list[float],          # Vector de términos independientes
-        x0: list[float],         # Vector inicial de aproximación
-        tolerance: float,        # Tolerancia para el error
-        max_iterations: int,     # Número máximo de iteraciones
+        A: list[list[float]],
+        b: list[float],  
+        x0: list[float], 
+        tolerance: float,  
+        max_iterations: int,
+        **kwargs,
     ) -> dict:
+        pass
+    @abstractmethod
+    def validate_input(
+        self,
+        matrix_a_raw: str,
+        vector_b_raw: str,
+        initial_guess_raw: str,
+        tolerance: float,
+        max_iterations: int,
+        **kwargs,
+    ) -> str | list:
         pass

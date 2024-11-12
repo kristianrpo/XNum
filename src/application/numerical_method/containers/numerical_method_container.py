@@ -14,6 +14,9 @@ from src.application.numerical_method.services.gauss_seidel_service import (
 from src.application.numerical_method.services.sor_service import (
     SORService,
 )
+from src.application.numerical_method.services.vandermonde_service import (
+    VandermondeService,
+)
 
 
 class NumericalMethodContainer(containers.DeclarativeContainer):
@@ -23,3 +26,4 @@ class NumericalMethodContainer(containers.DeclarativeContainer):
     jacobi_service = providers.Factory(JacobiService)
     gauss_seidel_service = providers.Factory(GaussSeidelService)
     sor_service = providers.Factory(SORService)
+    vandermonde_service = providers.Factory(VandermondeService)

@@ -13,3 +13,13 @@ class IntervalMethod(ABC):
         precision: int,
     ) -> dict:
         pass
+
+    @abstractmethod
+    def validate_input(
+        interval_a: float,
+        interval_b: float,
+        tolerance: float,
+        max_iterations: int,
+        function_f: str,
+    ) -> str | bool:
+        pass

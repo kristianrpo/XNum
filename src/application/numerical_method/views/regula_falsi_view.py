@@ -38,6 +38,26 @@ class RegulaFalsiView(TemplateView):
         function_f = request.POST.get("function_f")
         precision = int(request.POST.get("precision"))
 
+        response_validation = self.method_service.validate_input(
+            interval_a=interval_a, 
+            interval_b=interval_b, 
+            tolerance=tolerance, 
+            max_iterations=max_iterations, 
+            function_f=function_f
+        )
+
+        if isinstance(response_validation, str):
+            error_response = {
+                "message_method": response_validation,
+                "table": {},
+                "is_successful": False,
+                "have_solution": False,
+                "root": 0.0,
+            }
+            template_data = template_data | error_response
+            context["template_data"] = template_data
+            return self.render_to_response(context)
+
         method_response = self.method_service.solve(
             interval_a=interval_a,
             interval_b=interval_b,
@@ -51,7 +71,7 @@ class RegulaFalsiView(TemplateView):
             plot_function(
                 function_f,
                 method_response["have_solution"],
-                method_response["root"],
+                [(method_response["root"], 0.0)],
             )
 
         template_data = template_data | method_response

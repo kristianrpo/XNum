@@ -1,13 +1,20 @@
 from django.urls import path
+from .views.file_download_view import FileDownloadView
 from .views.bisection_view import BisectionView
 from .views.regula_falsi_view import RegulaFalsiView
 from .views.fixed_point_view import FixedPointView
 from .views.jacobi_view import JacobiView
 from .views.gauss_seidel_view import GaussSeidelView
 from .views.sor_view import SORView
+from .views.vandermonde_view import VandermondeView
 
 app_name = "numerical_method"
 urlpatterns = [
+    path(
+        "download-svg/",
+        FileDownloadView.as_view(),
+        name="download_svg",
+    ),
     path(
         "bisection/",
         BisectionView.as_view(),
@@ -37,5 +44,10 @@ urlpatterns = [
         "sor/",
         SORView.as_view(),
         name="sor",
-    )
+    ),
+    path(
+        "vandermonde/",
+        VandermondeView.as_view(),
+        name="vandermonde",
+    ),
 ]
