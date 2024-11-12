@@ -49,7 +49,7 @@ class SORView(TemplateView):
             template_data = template_data | error_response
             context["template_data"] = template_data
             return self.render_to_response(context)
-        
+
         # Obtener los valores de A, b y x0
         A = response_validation[0]
         b = response_validation[1]
@@ -64,7 +64,7 @@ class SORView(TemplateView):
             max_iterations=max_iterations,
             w=w,
         )
-    
+
         # Verificación de éxito y almacenamiento de la respuesta
         template_data["indexes"] = list(range(1, len(A) + 1))
         template_data["relaxation_factor"] = w

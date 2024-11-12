@@ -13,7 +13,7 @@ class IterativeMethod(ABC):
         **kwargs,
     ) -> dict:
         pass
-    
+
     @abstractmethod
     def validate_input(
         self,

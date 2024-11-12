@@ -3,6 +3,9 @@ from config.settings import BASE_DIR
 import matplotlib.pyplot as plt
 import math
 import textwrap
+import matplotlib
+
+matplotlib.use("Agg")
 
 
 def plot_function(

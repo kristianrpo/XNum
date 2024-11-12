@@ -58,7 +58,7 @@
           </a>
         </div>
         <div class="col">
-          <a class="card no-border" href="#">
+          <a class="card no-border" href="{% url 'numerical_method:newton_raphson' %}">
             <img src="{% static 'img/home/newton-raphson.webp' %}" class="card-img-top" alt="Newton-Raphson" />
             <div class="card-body">
               <p class="card-text text-center">Método de Newton-Raphson</p>
@@ -66,7 +66,7 @@
           </a>
         </div>
         <div class="col">
-          <a class="card no-border" href="#">
+          <a class="card no-border" href="{% url 'numerical_method:secant' %}">
             <img src="{% static 'img/home/secant.webp' %}" class="card-img-top" alt="Secante" />
             <div class="card-body">
               <p class="card-text text-center">Método de la secante</p>
@@ -74,7 +74,7 @@
           </a>
         </div>
         <div class="col">
-          <a class="card no-border" href="#">
+          <a class="card no-border" href="{% url 'numerical_method:multiple_roots_1' %}">
             <img src="{% static 'img/home/multiple-root-1.webp' %}" class="card-img-top" alt="Multiple root #1" />
             <div class="card-body">
               <p class="card-text text-center">Método de raíces múltiples #1</p>
@@ -82,7 +82,7 @@
           </a>
         </div>
         <div class="col">
-          <a class="card no-border" href="#">
+          <a class="card no-border" href="{% url 'numerical_method:multiple_roots_2' %}">
             <img src="{% static 'img/home/multiple-root-2.webp' %}" class="card-img-top" alt="Multiple root #2" />
             <div class="card-body">
               <p class="card-text text-center">Método de raíces múltiples #2</p>

@@ -10,14 +10,14 @@ from src.application.shared.utils.plot_function import plot_function
 from django.http import HttpRequest, HttpResponse
 
 
-class FixedPointView(TemplateView):
-    template_name = "fixed_point.html"
+class MultipleRoots1View(TemplateView):
+    template_name = "multiple_roots_1.html"
 
     @inject
     def __init__(
         self,
         method_service: IterativeMethod = Provide[
-            NumericalMethodContainer.fixed_point_service
+            NumericalMethodContainer.multiple_roots_1_service
         ],
         **kwargs
     ):
@@ -28,22 +28,19 @@ class FixedPointView(TemplateView):
         self, request: HttpRequest, *args: object, **kwargs: object
     ) -> HttpResponse:
         context = self.get_context_data()
-
         template_data = {}
-
         x0 = float(request.POST.get("x0"))
         tolerance = float(request.POST.get("tolerance"))
         max_iterations = int(request.POST.get("max_iterations"))
         precision = int(request.POST.get("precision"))
         function_f = request.POST.get("function_f")
-        function_g = request.POST.get("function_g")
+        multiplicity = int(request.POST.get("multiplicity"))
 
         response_validation = self.method_service.validate_input(
             x0=x0,
             tolerance=tolerance,
             max_iterations=max_iterations,
             function_f=function_f,
-            function_g=function_g,
         )
 
         if isinstance(response_validation, str):
@@ -64,17 +61,14 @@ class FixedPointView(TemplateView):
             max_iterations=max_iterations,
             precision=precision,
             function_f=function_f,
-            function_g=function_g,
+            multiplicity=multiplicity,
         )
-
         if method_response["is_successful"]:
             plot_function(
                 function_f,
                 method_response["have_solution"],
                 [(method_response["root"], 0.0)],
             )
-
         template_data = template_data | method_response
         context["template_data"] = template_data
-
         return self.render_to_response(context)

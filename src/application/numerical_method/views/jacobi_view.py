@@ -33,7 +33,7 @@ class JacobiView(TemplateView):
             vector_b_raw=vector_b_raw,
             initial_guess_raw=initial_guess_raw,
             tolerance=tolerance,
-            max_iterations=max_iterations,  
+            max_iterations=max_iterations,
         )
 
         if isinstance(response_validation, str):
@@ -47,7 +47,7 @@ class JacobiView(TemplateView):
             template_data = template_data | error_response
             context["template_data"] = template_data
             return self.render_to_response(context)
-        
+
         # Obtener los valores de A, b y x0
         A = response_validation[0]
         b = response_validation[1]

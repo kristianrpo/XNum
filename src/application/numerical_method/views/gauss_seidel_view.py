@@ -21,7 +21,7 @@ class GaussSeidelView(TemplateView):
         context = self.get_context_data()
 
         template_data = {}
-            
+
         matrix_a_raw = request.POST.get("matrix_a", "")
         vector_b_raw = request.POST.get("vector_b", "")
         initial_guess_raw = request.POST.get("initial_guess", "")
@@ -33,7 +33,7 @@ class GaussSeidelView(TemplateView):
             vector_b_raw=vector_b_raw,
             initial_guess_raw=initial_guess_raw,
             tolerance=tolerance,
-            max_iterations=max_iterations,  
+            max_iterations=max_iterations,
         )
         if isinstance(response_validation, str):
             error_response = {
@@ -46,7 +46,7 @@ class GaussSeidelView(TemplateView):
             template_data = template_data | error_response
             context["template_data"] = template_data
             return self.render_to_response(context)
-        
+
         # Obtener los valores de A, b y x0
         A = response_validation[0]
         b = response_validation[1]
@@ -60,7 +60,7 @@ class GaussSeidelView(TemplateView):
             tolerance=tolerance,
             max_iterations=max_iterations,
         )
-        
+
         # Verificación de éxito y almacenamiento de la respuesta
         template_data["indexes"] = list(range(1, len(A) + 1))
         template_data = template_data | method_response

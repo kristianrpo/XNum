@@ -6,13 +6,14 @@ class MatrixMethod(ABC):
     def solve(
         self,
         A: list[list[float]],
-        b: list[float],  
-        x0: list[float], 
-        tolerance: float,  
+        b: list[float],
+        x0: list[float],
+        tolerance: float,
         max_iterations: int,
         **kwargs,
     ) -> dict:
         pass
+
     @abstractmethod
     def validate_input(
         self,

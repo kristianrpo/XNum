@@ -36,10 +36,10 @@
                 <a class="dropdown-item" href="{% url 'numerical_method:bisection' %}">Bisección</a>
                 <a class="dropdown-item" href="{% url 'numerical_method:regula_falsi' %}">Regla falsa</a>
                 <a class="dropdown-item" href="{% url 'numerical_method:fixed_point' %}">Punto fijo</a>
-                <a class="dropdown-item" href="#">Newton-Raphson</a>
-                <a class="dropdown-item" href="#">Secante</a>
-                <a class="dropdown-item" href="#">Raíces múltiples #1</a>
-                <a class="dropdown-item" href="#">Raíces múltiples #2</a>
+                <a class="dropdown-item" href="{% url 'numerical_method:newton_raphson' %}">Newton-Raphson</a>
+                <a class="dropdown-item" href="{% url 'numerical_method:secant' %}">Secante</a>
+                <a class="dropdown-item" href="{% url 'numerical_method:multiple_roots_1' %}">Raíces múltiples #1</a>
+                <a class="dropdown-item" href="{% url 'numerical_method:multiple_roots_2' %}">Raíces múltiples #2</a>
               </div>
             </li>
             <li class="nav-item dropdown ml-auto">

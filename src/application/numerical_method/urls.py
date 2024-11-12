@@ -3,6 +3,10 @@ from .views.file_download_view import FileDownloadView
 from .views.bisection_view import BisectionView
 from .views.regula_falsi_view import RegulaFalsiView
 from .views.fixed_point_view import FixedPointView
+from .views.newton_raphson_view import NewtonRaphsonView
+from .views.secant_view import SecantView
+from .views.multiple_roots_1_view import MultipleRoots1View
+from .views.multiple_roots_2_view import MultipleRoots2View
 from .views.jacobi_view import JacobiView
 from .views.gauss_seidel_view import GaussSeidelView
 from .views.sor_view import SORView
@@ -29,6 +33,26 @@ urlpatterns = [
         "fixed-point/",
         FixedPointView.as_view(),
         name="fixed_point",
+    ),
+    path(
+        "newton_raphson/",
+        NewtonRaphsonView.as_view(),
+        name="newton_raphson",
+    ),
+    path(
+        "secant/",
+        SecantView.as_view(),
+        name="secant",
+    ),
+    path(
+        "multiple_roots_1/",
+        MultipleRoots1View.as_view(),
+        name="multiple_roots_1",
+    ),
+    path(
+        "multiple_roots_2/",
+        MultipleRoots2View.as_view(),
+        name="multiple_roots_2",
     ),
     path(
         "jacobi/",

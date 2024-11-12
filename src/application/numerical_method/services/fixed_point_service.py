@@ -117,16 +117,16 @@ class FixedPointService(IterativeMethod):
             "have_solution": False,
             "root": 0.0,
         }
-    
+
     def validate_input(
         self,
         x0: float,
         tolerance: float,
         max_iterations: int,
         function_f: str,
-        **kwargs
+        **kwargs,
     ) -> str | bool:
-        
+
         function_g = kwargs.get("function_g")
 
         # Validación de los parámetros de entrada tolerancia positiva
@@ -136,7 +136,7 @@ class FixedPointService(IterativeMethod):
         # Validación de los parámetros de entrada maximo numero de iteraciones positivo
         if not isinstance(max_iterations, int) or max_iterations <= 0:
             return "El máximo número de iteraciones debe ser un entero positivo."
-        
+
         # Validación de las funciones ingresadas
         try:
             x = x0
@@ -146,3 +146,4 @@ class FixedPointService(IterativeMethod):
             f = eval(function_f)
         except Exception as e:
             return f"Error en la función ingresada, la descripción de este error fué: {str(e)}. Por favor, verifique que las funciónes sean correctas (que use correctamente las funciones de Python, operadores, funciones math, etc., y se utilice la variable x para las mismas). Adicionalmente verifique su g(x)."
+        return True

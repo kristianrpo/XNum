@@ -12,7 +12,7 @@ class SORService(MatrixMethod):
         max_iterations: int,  # Número máximo de iteraciones
         **kwargs,
     ) -> dict:
-        
+
         w = kwargs.get("w")
 
         A = np.array(A)
@@ -96,9 +96,9 @@ class SORService(MatrixMethod):
         max_iterations: int,
         **kwargs,
     ) -> str | list:
-        
+
         w = kwargs.get("w")
-        
+
         # Validación de los parámetros de entrada tolerancia positiva
         if not isinstance(tolerance, (int, float)) or tolerance <= 0:
             return "La tolerancia debe ser un número positivo"
@@ -106,7 +106,7 @@ class SORService(MatrixMethod):
         # Validación de los parámetros de entrada maximo numero de iteraciones positivo
         if not isinstance(max_iterations, int) or max_iterations <= 0:
             return "El máximo número de iteraciones debe ser un entero positivo."
-        
+
         # Validación de las entradas numéricas
         try:
             A = [
@@ -119,16 +119,18 @@ class SORService(MatrixMethod):
             x0 = [float(num) for num in initial_guess_raw.strip().split()]
         except ValueError:
             return "Todas las entradas deben ser numéricas."
-        
+
         # Validar que A es cuadrada y de máximo tamaño 6x6
         if len(A) > 6 or any(len(row) != len(A) for row in A):
             return "La matriz A debe ser cuadrada de hasta 6x6."
-        
+
         # Validar que b y x0 tengan tamaños compatibles con A
         if len(b) != len(A) or len(x0) != len(A):
-            return "El vector b y x0 deben ser compatibles con el tamaño de la matriz A."
-        
+            return (
+                "El vector b y x0 deben ser compatibles con el tamaño de la matriz A."
+            )
+
         if w <= 0 or w >= 2:
             return "El factor de relajación w debe estar en el rango (0, 2)."
 
-        return [A,b,x0]
+        return [A, b, x0]
