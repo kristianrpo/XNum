@@ -54,7 +54,6 @@ class BisectionView(TemplateView):
             context["template_data"] = template_data
             return self.render_to_response(context)
 
-
         method_response = self.method_service.solve(
             interval_a=interval_a,
             interval_b=interval_b,

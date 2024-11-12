@@ -150,8 +150,8 @@ class BisectionService(IntervalMethod):
             "is_successful": True,
             "have_solution": False,
             "root": 0.0,
-        }            
-        
+        }
+
     def validate_input(
         self,
         interval_a: float,
@@ -160,27 +160,28 @@ class BisectionService(IntervalMethod):
         max_iterations: int,
         function_f: str,
     ) -> str | bool:
-        
+
         # Validación de los parámetros de entrada tolerancia positiva
         if not isinstance(tolerance, (int, float)) or tolerance <= 0:
             return "La tolerancia debe ser un número positivo"
-        
+
         # Validación de los parámetros de entrada maximo numero de iteraciones positivo
         if not isinstance(max_iterations, int) or max_iterations <= 0:
             return "El máximo número de iteraciones debe ser un entero positivo."
-        
+
         # Validación de la función ingresada
         try:
             x = interval_a
             fa = eval(function_f)
             x = interval_b
-            fb = eval(function_f) 
+            fb = eval(function_f)
         except Exception as e:
             return f"Error en la función ingresada, la descripción de este error fue: {str(e)}. Por favor, verifique que la función sea correcta (que use correctamente las funciones de Python, operadores, funciones math, etc, y se utilice la variable x para la misma)."
-                
-        
+
         # Si el producto f(a) * f(b) no es negativo, el intervalo proporcionado no es adecuado para la bisección.
-        if fa*fb>0:
-            return "El intervalo es inadecuado, recuerde que se debe encontrar un raíz para el intervalo dado".format(max_iterations)
-        
+        if fa * fb > 0:
+            return "El intervalo es inadecuado, recuerde que se debe encontrar un raíz para el intervalo dado".format(
+                max_iterations
+            )
+
         return True
