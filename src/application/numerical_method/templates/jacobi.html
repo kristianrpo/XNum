@@ -20,34 +20,96 @@
         <form method="POST" action="{% url 'numerical_method:jacobi' %}">
           {% csrf_token %}
           <div class="form-group">
+            <label for="matrix_size">Seleccione el tamaño de la matriz:</label>
+            <select class="form-control" id="matrix_size" name="matrix_size" required>
+              <option value="2">2x2</option>
+              <option value="3" selected>3x3</option>
+              <option value="4">4x4</option>
+              <option value="5">5x5</option>
+              <option value="6">6x6</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label for="matrix_a">Ingrese matriz de coeficientes A (separar filas por punto y coma y columnas por espacio):</label>
-            <input type="text" class="form-control" id="matrix_a" name="matrix_a" placeholder="Ejemplo: '45 13 -4 8; -5 -28 4 -14; 9 15 63 -7; 2 3 -8 -42'" required />
+            <input type="text" class="form-control" id="matrix_a" name="matrix_a" placeholder="Ejemplo: 'a b c; d e f; g h i'" required />
           </div>
           <div class="form-group">
             <label for="vector_b">Ingrese vector b (separar elementos por espacio):</label>
-            <input type="text" class="form-control" id="vector_b" name="vector_b" placeholder="Ejemplo: '-25 82 75 -43'" required />
+            <input type="text" class="form-control" id="vector_b" name="vector_b" placeholder="Ejemplo: '1 1 1'" required />
           </div>
           <div class="form-group">
             <label for="initial_guess">Ingrese vector inicial x0 (separar elementos por espacio):</label>
-            <input type="text" class="form-control" id="initial_guess" name="initial_guess" placeholder="Ejemplo: '2 2 2 2'" required />
+            <input type="text" class="form-control" id="initial_guess" name="initial_guess" placeholder="Ejemplo: '0 0 0'" required />
           </div>
           <div class="form-group">
             <label for="tolerance">Tolerancia:</label>
-            <input type="number" class="form-control" id="tolerance" name="tolerance" placeholder="Ingresar tolerancia" step="any" required />
+            <input type="number" class="form-control" id="tolerance" name="tolerance" placeholder="Ejemplo: 0.01" step="any" required />
           </div>
           <div class="form-group">
             <label for="max_iterations">Máximo número de iteraciones:</label>
-            <input type="number" class="form-control" id="max_iterations" name="max_iterations" placeholder="Ingresar número de iteraciones" required />
+            <input type="number" class="form-control" id="max_iterations" name="max_iterations" placeholder="Ejemplo: 50" required />
+          </div>
+          <div class="form-group">
+            <label for="precision_type">Tipo de precisión:</label>
+            <select class="form-control" id="precision_type" name="precision_type" required>
+              <option value="decimals" selected>Decimales correctos</option>
+              <option value="significant_figures">Cifras significativas</option>
+            </select>
+            <small class="form-text text-muted">
+              Ejemplo: Seleccione "Decimales correctos" para obtener resultados con un número fijo de decimales, o "Cifras significativas" para ajustar el formato de los resultados según el número total de dígitos significativos.
+            </small>
+          </div>
+          <div class="form-group">
+            <label for="precision_value">Valor de precisión:</label>
+            <input type="number" class="form-control" id="precision_value" name="precision_value" placeholder="Ejemplo: 3" min="1" required />
+            <small class="form-text text-muted">
+              Ejemplo: Ingrese "3" para resultados con 3 decimales correctos o 3 cifras significativas, según la selección anterior.
+            </small>
           </div>
           <button type="submit" class="btn btn-dark">Encontrar solución del sistema</button>
         </form>
       </div>
-      {% if template_data %}
-        {% include 'components/alert_message.html' with message=template_data.message_method title='Información proporcionada por el método' %}
-        {% if template_data.is_successful %}
-          {% include 'components/result_tables/result_table_2_SNSE.html' with table=template_data.table %}
-        {% endif %}
-      {% endif %}
     </div>
+
+    {% if template_data %}
+      {% include 'components/alert_message.html' with message=template_data.message_method title='Información proporcionada por el método' %}
+      <div class="mt-4">
+        <h3>Resultados adicionales</h3>
+        <p><strong>Radio espectral:</strong> {{ template_data.spectral_radius }}</p>
+        <p>
+          <strong>Convergencia:</strong>
+          {% if template_data.spectral_radius < 1 %}
+            <span class="text-success">El método converge.</span>
+          {% else %}
+            <span class="text-danger">El método no converge.</span>
+          {% endif %}
+        </p>
+      </div>
+      {% if template_data.is_successful %}
+        {% include 'components/result_tables/result_table_2_SNSE.html' with table=template_data.table %}
+      {% endif %}
+      {% if template_data.plot_path %}
+        <div class="mt-4">
+          <h3>Gráfica del sistema (2x2)</h3>
+          <img src="{% static template_data.plot_path|slice:'7:' %}" alt="Gráfica del sistema 2x2" class="img-fluid" />
+        </div>
+      {% endif %}
+    {% endif %}
   </div>
+
+  <script>
+    document.getElementById('matrix_size').addEventListener('change', function () {
+      const size = parseInt(this.value, 10);
+      const placeholders = {
+          2: "'a b; c d'",
+          3: "'a b c; d e f; g h i'",
+          4: "'a b c d; e f g h; i j k l; m n o p'",
+          5: "'a b c d e; f g h i j; k l m n o; p q r s t; u v w x y'",
+          6: "'a b c d e f; g h i j k l; m n o p q r; s t u v w x; y z aa ab ac ad; ae af ag ah ai aj'"
+      };
+      document.getElementById('matrix_a').placeholder = `Ejemplo: ${placeholders[size]}`;
+      document.getElementById('vector_b').placeholder = `Ejemplo: '${"1 ".repeat(size).trim()}'`;
+      document.getElementById('initial_guess').placeholder = `Ejemplo: '${"0 ".repeat(size).trim()}'`;
+    });
+  </script>
 {% endblock %}
