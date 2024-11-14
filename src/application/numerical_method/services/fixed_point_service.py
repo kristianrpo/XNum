@@ -47,8 +47,8 @@ class FixedPointService(IterativeMethod):
             except Exception as e:
                 return {
                     "message_method": f"El x evaluado en g(x) no pertenece al dominio de la función, la descripción de este error fué: {str(e)}.",
-                    "table": {},
-                    "is_successful": False,
+                    "table": table,
+                    "is_successful": True,
                     "have_solution": False,
                     "root": 0.0,
                 }
@@ -144,6 +144,19 @@ class FixedPointService(IterativeMethod):
 
             x = g
             f = eval(function_f)
+        except ValueError:
+            return "Error: Valor fuera del dominio permitido para la función. Verifique que los valores de 'x' sean válidos en el dominio de la función."
+
+        except SyntaxError:
+            return "Error de sintaxis en la función ingresada. Verifique la expresión y asegúrese de que sea válida en Python."
+
+        except NameError:
+            return "Error: Nombre no definido en la función. Asegúrese de usar la variable 'x' y las funciones de la biblioteca 'math' correctamente."
+
+        except ZeroDivisionError:
+            return "Error: División por cero en la función. Asegúrese de que la función no tenga denominadores que se anulen en el intervalo dado."
+
         except Exception as e:
-            return f"Error en la función ingresada, la descripción de este error fué: {str(e)}. Por favor, verifique que las funciónes sean correctas (que use correctamente las funciones de Python, operadores, funciones math, etc., y se utilice la variable x para las mismas). Adicionalmente verifique su g(x)."
+            return f"Error en la función: {str(e)}."
+
         return True
