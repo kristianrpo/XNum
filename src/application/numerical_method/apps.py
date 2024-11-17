@@ -21,5 +21,6 @@ class NumericalMethodConfig(AppConfig):
                 "src.application.numerical_method.views.gauss_seidel_view",
                 "src.application.numerical_method.views.sor_view",
                 "src.application.numerical_method.views.vandermonde_view",
+                "src.application.numerical_method.views.lagrange_view",
             ]
         )
