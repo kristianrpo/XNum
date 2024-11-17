@@ -1,5 +1,6 @@
 import numpy as np
 from src.application.numerical_method.interfaces.matrix_method import MatrixMethod
+from src.application.shared.utils.plot_matrix_solution import plot_matrix_solution, plot_system_equations
 
 
 class JacobiService(MatrixMethod):
@@ -54,8 +55,9 @@ class JacobiService(MatrixMethod):
             current_iteration += 1
 
         # Verificación de éxito o fallo tras las iteraciones
+        result = {}
         if current_error <= tolerance:
-            return {
+            result = {
                 "message_method": f"Aproximación de la solución con tolerancia = {tolerance} y el radio espectral es de = {spectral_radius}",
                 "table": table,
                 "is_successful": True,
@@ -64,7 +66,7 @@ class JacobiService(MatrixMethod):
                 "spectral_radius": spectral_radius,
             }
         elif current_iteration >= max_iterations:
-            return {
+            result = {
                 "message_method": f"El método funcionó correctamente, pero no se encontró una solución en {max_iterations} iteraciones y el radio espectral es de = {spectral_radius}.",
                 "table": table,
                 "is_successful": True,
@@ -73,13 +75,20 @@ class JacobiService(MatrixMethod):
                 "spectral_radius": spectral_radius,
             }
         else:
-            return {
+            result = {
                 "message_method": f"El método falló al intentar aproximar una solución",
                 "table": table,
                 "is_successful": True,
                 "have_solution": False,
                 "solution": [],
             }
+
+        # Si la matriz es 2x2, generar la gráfica
+        if len(A) == 2:
+            plot_matrix_solution(table, x1.tolist(), spectral_radius)
+            plot_system_equations(A.tolist(), b.tolist(), x1.tolist())
+
+        return result
 
     def validate_input(
         self,
@@ -88,6 +97,7 @@ class JacobiService(MatrixMethod):
         initial_guess_raw: str,
         tolerance: float,
         max_iterations: int,
+        matrix_size: int,
         **kwargs,
     ) -> str | list:
 
@@ -112,6 +122,10 @@ class JacobiService(MatrixMethod):
         except ValueError:
             return "Todas las entradas deben ser numéricas."
 
+        # Validar que A es cuadrada y coincide con el tamaño seleccionado
+        if len(A) != matrix_size or any(len(row) != matrix_size for row in A):
+            return f"La matriz A debe ser cuadrada y coincidir con el tamaño seleccionado ({matrix_size}x{matrix_size})."
+        
         # Validar que A es cuadrada y de máximo tamaño 6x6
         if len(A) > 6 or any(len(row) != len(A) for row in A):
             return "La matriz A debe ser cuadrada de hasta 6x6."

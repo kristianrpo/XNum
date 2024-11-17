@@ -15,6 +15,12 @@ class SORView(TemplateView):
         super().__init__(**kwargs)
         self.method_service = NumericalMethodContainer.sor_service()
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Agregando los tamaños de matriz al contexto
+        context["matrix_sizes"] = [2, 3, 4, 5, 6]
+        return context
+
     def post(
         self, request: HttpRequest, *args: object, **kwargs: object
     ) -> HttpResponse:
@@ -22,23 +28,28 @@ class SORView(TemplateView):
 
         template_data = {}
 
+        # Obtener datos del formulario
         matrix_a_raw = request.POST.get("matrix_a", "")
         vector_b_raw = request.POST.get("vector_b", "")
         initial_guess_raw = request.POST.get("initial_guess", "")
         tolerance = float(request.POST.get("tolerance"))
         max_iterations = int(request.POST.get("max_iterations"))
-        w = float(request.POST.get("relaxation_factor"))
+        relaxation_factor = float(request.POST.get("relaxation_factor"))
+        matrix_size = int(request.POST.get("matrix_size"))
 
+        # Validar entrada
         response_validation = self.method_service.validate_input(
             matrix_a_raw=matrix_a_raw,
             vector_b_raw=vector_b_raw,
             initial_guess_raw=initial_guess_raw,
             tolerance=tolerance,
             max_iterations=max_iterations,
-            w=w,
+            relaxation_factor=relaxation_factor,
+            matrix_size=matrix_size,
         )
 
         if isinstance(response_validation, str):
+            # Si hay errores de validación, devolver mensaje de error
             error_response = {
                 "message_method": response_validation,
                 "table": {},
@@ -62,12 +73,12 @@ class SORView(TemplateView):
             x0=x0,
             tolerance=tolerance,
             max_iterations=max_iterations,
-            w=w,
+            relaxation_factor=relaxation_factor,
         )
 
         # Verificación de éxito y almacenamiento de la respuesta
         template_data["indexes"] = list(range(1, len(A) + 1))
-        template_data["relaxation_factor"] = w
+        template_data["relaxation_factor"] = relaxation_factor
         template_data = template_data | method_response
         context["template_data"] = template_data
         return self.render_to_response(context)

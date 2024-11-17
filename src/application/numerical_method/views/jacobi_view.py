@@ -15,6 +15,12 @@ class JacobiView(TemplateView):
         super().__init__(**kwargs)
         self.method_service = NumericalMethodContainer.jacobi_service()
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Agregando los tamaños de matriz al contexto
+        context["matrix_sizes"] = [2, 3, 4, 5, 6]
+        return context
+
     def post(
         self, request: HttpRequest, *args: object, **kwargs: object
     ) -> HttpResponse:
@@ -27,6 +33,7 @@ class JacobiView(TemplateView):
         initial_guess_raw = request.POST.get("initial_guess", "")
         tolerance = float(request.POST.get("tolerance"))
         max_iterations = int(request.POST.get("max_iterations"))
+        matrix_size = int(request.POST.get("matrix_size"))
 
         response_validation = self.method_service.validate_input(
             matrix_a_raw=matrix_a_raw,
@@ -34,6 +41,7 @@ class JacobiView(TemplateView):
             initial_guess_raw=initial_guess_raw,
             tolerance=tolerance,
             max_iterations=max_iterations,
+            matrix_size=matrix_size,
         )
 
         if isinstance(response_validation, str):
