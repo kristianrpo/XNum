@@ -11,6 +11,7 @@ from .views.jacobi_view import JacobiView
 from .views.gauss_seidel_view import GaussSeidelView
 from .views.sor_view import SORView
 from .views.vandermonde_view import VandermondeView
+from .views.lagrange_view import LagrangeView
 
 app_name = "numerical_method"
 urlpatterns = [
@@ -73,5 +74,10 @@ urlpatterns = [
         "vandermonde/",
         VandermondeView.as_view(),
         name="vandermonde",
+    ),
+        path(
+        "lagrange/",
+        LagrangeView.as_view(),
+        name="lagrange",
     ),
 ]
