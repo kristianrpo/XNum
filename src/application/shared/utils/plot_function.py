@@ -22,17 +22,27 @@ def plot_function(
 
     # Generar un rango más ajustado de valores de x para la evaluación de la función
     if not have_solution:
-        x_vals = np.linspace(-100, 100, 1000)
+        x_vals = np.linspace(-100, 100, 10000)
     else:
-        x_vals = np.linspace(min_x - 3, max_x + 3, 1000)
+        x_vals = np.linspace(min_x - 3, max_x + 3, 10000)
 
-    y_vals = [eval(function_f, {"math": math, "x": val}) for val in x_vals]
+    # Evaluar la función de forma segura
+    y_vals = []
+    valid_x = []
+    for val in x_vals:
+        try:
+            y = eval(function_f, {"math": math, "x": val})
+            if not (np.isnan(y) or np.isinf(y)):
+                y_vals.append(y)
+                valid_x.append(val)
+        except Exception:
+            continue
 
     # Crear la figura
     plt.figure(figsize=(6, 4))
 
     # Graficar la función en el rango ajustado
-    plt.plot(x_vals, y_vals, color="#a18262", label="f(x)")
+    plt.plot(valid_x, y_vals, color="#a18262", label="f(x)")
 
     if have_solution:
         for x, y in points:
