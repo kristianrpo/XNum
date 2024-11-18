@@ -4,6 +4,7 @@ from src.application.numerical_method.interfaces.iterative_method import (
     IterativeMethod,
 )
 from src.application.shared.utils.convert_math_to_simply import convert_math_to_sympy
+from src.application.shared.utils.plot_function import plot_function
 
 
 class NewtonService(IterativeMethod):
@@ -44,7 +45,7 @@ class NewtonService(IterativeMethod):
                     return {
                         "message_method": f"La derivada es cero en x = {x0_current}. No se puede continuar.",
                         "table": table,
-                        "is_successful": False,
+                        "is_successful": True,
                         "have_solution": False,
                         "root": 0.0,
                     }
@@ -54,7 +55,7 @@ class NewtonService(IterativeMethod):
                 return {
                     "message_method": f"Error al evaluar la función o su derivada: {str(e)}.",
                     "table": table,
-                    "is_successful": False,
+                    "is_successful": True,
                     "have_solution": False,
                     "root": 0.0,
                 }
@@ -109,27 +110,25 @@ class NewtonService(IterativeMethod):
         **kwargs,
     ) -> str | bool:
 
-        # Inicializa la variable simbólica para usar en SymPy
         x = sp.symbols("x")
+    
         # Convierte la función ingresada de `math` a `SymPy`
         sympy_function_f = convert_math_to_sympy(function_f)
 
         # Validación de los parámetros de entrada tolerancia positiva
         if not isinstance(tolerance, (int, float)) or tolerance <= 0:
+            plot_function(function_f, False, [(x0, 0)]);
             return "La tolerancia debe ser un número positivo"
 
-        # Validación de los parámetros de entrada maximo numero de iteraciones positivo
+        # Validación de los parámetros de entrada máximo número de iteraciones positivo
         if not isinstance(max_iterations, int) or max_iterations <= 0:
+            plot_function(function_f, False, [(x0, 0)]);
             return "El máximo número de iteraciones debe ser un entero positivo."
 
         try:
             f_expr = sp.sympify(sympy_function_f)
+            if f_expr.free_symbols != {x}:
+                return "Error al interpretar la función: utilice la variable 'x'."
             f_prime_expr = sp.diff(f_expr, x)
         except Exception as e:
             return f"Error al interpretar la función ingresada o su derivada: {str(e)}."
-
-        try:
-            sp.lambdify(x, f_expr, modules=["math"])
-            sp.lambdify(x, f_prime_expr, modules=["math"])
-        except Exception as e:
-            return f"Error al convertir la función o su derivada a formato numérico: {str(e)}."

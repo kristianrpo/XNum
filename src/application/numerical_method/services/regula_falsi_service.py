@@ -172,10 +172,12 @@ class RegulaFalsiService(IntervalMethod):
 
         # Validación de los parámetros de entrada tolerancia positiva
         if not isinstance(tolerance, (int, float)) or tolerance <= 0:
+            plot_function(function_f, False, [(interval_a, 0), (interval_b, 0)]);
             return "La tolerancia debe ser un número positivo"
 
         # Validación de los parámetros de entrada maximo numero de iteraciones positivo
         if not isinstance(max_iterations, int) or max_iterations <= 0:
+            plot_function(function_f, False, [(interval_a, 0), (interval_b, 0)]);
             return "El máximo número de iteraciones debe ser un entero positivo."
 
         # Validación de la función ingresada
