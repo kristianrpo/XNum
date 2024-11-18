@@ -1,5 +1,6 @@
 import numpy as np
 from src.application.numerical_method.interfaces.matrix_method import MatrixMethod
+from src.application.shared.utils.plot_matrix_solution import plot_matrix_solution, plot_system_equations
 
 
 class SORService(MatrixMethod):
@@ -10,10 +11,9 @@ class SORService(MatrixMethod):
         x0: list[float],  # Vector inicial de aproximación
         tolerance: float,  # Tolerancia para el error
         max_iterations: int,  # Número máximo de iteraciones
+        relaxation_factor: float,  # Factor de relajación (w)
         **kwargs,
     ) -> dict:
-
-        w = kwargs.get("w")
 
         A = np.array(A)
         b = np.array(b)
@@ -29,7 +29,7 @@ class SORService(MatrixMethod):
         U = -np.triu(A, 1)
 
         # Cálculo de la matriz de iteración T para el método SOR
-        T = np.linalg.inv(D - w * L).dot((1 - w) * D + w * U)
+        T = np.linalg.inv(D - relaxation_factor * L).dot((1 - relaxation_factor) * D + relaxation_factor * U)
         spectral_radius = max(abs(np.linalg.eigvals(T)))
 
         current_error = tolerance + 1
@@ -39,10 +39,8 @@ class SORService(MatrixMethod):
         while current_error > tolerance and current_iteration < max_iterations:
             x_new = x.copy()
             for i in range(n):
-                sum_others = np.dot(A[i, :i], x_new[:i]) + np.dot(
-                    A[i, i + 1 :], x[i + 1 :]
-                )
-                x_new[i] = (1 - w) * x[i] + (w / A[i, i]) * (b[i] - sum_others)
+                sum_others = np.dot(A[i, :i], x_new[:i]) + np.dot(A[i, i + 1:], x[i + 1:])
+                x_new[i] = (1 - relaxation_factor) * x[i] + (relaxation_factor / A[i, i]) * (b[i] - sum_others)
 
             # Calcular el error como norma infinito de la diferencia
             current_error = np.linalg.norm(x_new - x, ord=np.inf)
@@ -59,8 +57,9 @@ class SORService(MatrixMethod):
             current_iteration += 1
 
         # Verificación de éxito o fallo tras las iteraciones
+        result = {}
         if current_error <= tolerance:
-            return {
+            result = {
                 "message_method": f"Aproximación de la solución con tolerancia = {tolerance} y el radio espectral es de = {spectral_radius}",
                 "table": table,
                 "is_successful": True,
@@ -69,7 +68,7 @@ class SORService(MatrixMethod):
                 "spectral_radius": spectral_radius,
             }
         elif current_iteration >= max_iterations:
-            return {
+            result = {
                 "message_method": f"El método funcionó correctamente, pero no se encontró una solución en {max_iterations} iteraciones y el radio espectral es de = {spectral_radius}.",
                 "table": table,
                 "is_successful": True,
@@ -78,7 +77,7 @@ class SORService(MatrixMethod):
                 "spectral_radius": spectral_radius,
             }
         else:
-            return {
+            result = {
                 "message_method": f"El método falló al intentar aproximar una solución",
                 "table": table,
                 "is_successful": False,
@@ -87,6 +86,13 @@ class SORService(MatrixMethod):
                 "spectral_radius": spectral_radius,
             }
 
+        # Si la matriz es 2x2, generar las gráficas
+        if len(A) == 2:
+            plot_matrix_solution(table, x.tolist(), spectral_radius)
+            plot_system_equations(A.tolist(), b.tolist(), x.tolist())
+
+        return result
+
     def validate_input(
         self,
         matrix_a_raw: str,
@@ -94,16 +100,16 @@ class SORService(MatrixMethod):
         initial_guess_raw: str,
         tolerance: float,
         max_iterations: int,
+        relaxation_factor: float,
+        matrix_size: int,
         **kwargs,
     ) -> str | list:
-
-        w = kwargs.get("w")
 
         # Validación de los parámetros de entrada tolerancia positiva
         if not isinstance(tolerance, (int, float)) or tolerance <= 0:
             return "La tolerancia debe ser un número positivo"
 
-        # Validación de los parámetros de entrada maximo numero de iteraciones positivo
+        # Validación de los parámetros de entrada máximo número de iteraciones positivo
         if not isinstance(max_iterations, int) or max_iterations <= 0:
             return "El máximo número de iteraciones debe ser un entero positivo."
 
@@ -120,17 +126,20 @@ class SORService(MatrixMethod):
         except ValueError:
             return "Todas las entradas deben ser numéricas."
 
-        # Validar que A es cuadrada y de máximo tamaño 6x6
-        if len(A) > 6 or any(len(row) != len(A) for row in A):
-            return "La matriz A debe ser cuadrada de hasta 6x6."
+        # Validar que A es cuadrada y coincide con el tamaño seleccionado
+        if len(A) != matrix_size or any(len(row) != matrix_size for row in A):
+            return f"La matriz A debe ser cuadrada y coincidir con el tamaño seleccionado ({matrix_size}x{matrix_size})."
+
+        # Validar que A es de máximo tamaño 6x6
+        if len(A) > 6:
+            return "La matriz A debe ser de hasta 6x6."
 
         # Validar que b y x0 tengan tamaños compatibles con A
         if len(b) != len(A) or len(x0) != len(A):
-            return (
-                "El vector b y x0 deben ser compatibles con el tamaño de la matriz A."
-            )
+            return "El vector b y x0 deben ser compatibles con el tamaño de la matriz A."
 
-        if w <= 0 or w >= 2:
+        # Validar el rango del factor de relajación w
+        if relaxation_factor <= 0 or relaxation_factor >= 2:
             return "El factor de relajación w debe estar en el rango (0, 2)."
 
         return [A, b, x0]

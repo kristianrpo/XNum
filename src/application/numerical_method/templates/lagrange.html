@@ -6,18 +6,18 @@
 {% endblock %}
 
 {% block title %}
-  Método de Vandermonde
+  Método de Lagrange
 {% endblock %}
 
 {% block content %}
   <div class="container">
-    <h1 class="font-weight-bold mb-4 text-center">Método de Vandermonde</h1>
+    <h1 class="font-weight-bold mb-4 text-center">Método de Lagrange</h1>
     <div class="row">
       <div class="col-md-6">
         {% include 'components/input_guidelines/card_I.html' %}
       </div>
       <div class="col-md-6">
-        <form method="POST" action="{% url 'numerical_method:vandermonde' %}">
+        <form method="POST" action="{% url 'numerical_method:lagrange' %}">
           {% csrf_token %}
           <div class="form-group">
             <label for="x">Ingrese cada uno de los <b>x</b> de su conjunto de datos:</label>
@@ -44,7 +44,7 @@
         {% if template_data.is_successful %}
           <div class="overflow-auto mt-4">
             <h2 class="font-weight-bold">Polinomio interpolante</h2>
-            <p>El polinomio interpolante de Vandermonde es:</p>
+            <p>El polinomio interpolante de Lagrange es:</p>
             <p><b>f(x) = </b>{{ template_data.polynomial }}</p>
           </div>
           <div class="container d-flex justify-content-center">

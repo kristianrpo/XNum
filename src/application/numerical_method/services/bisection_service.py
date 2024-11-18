@@ -1,4 +1,5 @@
 import math
+from src.application.shared.utils.plot_function import plot_function
 from src.application.numerical_method.interfaces.interval_method import (
     IntervalMethod,
 )
@@ -72,8 +73,17 @@ class BisectionService(IntervalMethod):
             Xn = (interval[0] + interval[1]) / 2
 
             # Evaluamos la función en el punto medio.
-            x = Xn
-            f = eval(function_f)
+            try:
+                x = Xn
+                f = eval(function_f)
+            except Exception as e:
+                return {
+                    "message_method": f"Error al evaluar la función en el punto medio: {str(e)}.",
+                    "table": table,
+                    "is_successful": True,
+                    "have_solution": False,
+                    "root": 0.0,
+                }
 
             # Guardamos los datos de la iteración actual en la tabla.
             table[current_iteration]["iteration"] = current_iteration
@@ -175,13 +185,24 @@ class BisectionService(IntervalMethod):
             fa = eval(function_f)
             x = interval_b
             fb = eval(function_f)
-        except Exception as e:
-            return f"Error en la función ingresada, la descripción de este error fue: {str(e)}. Por favor, verifique que la función sea correcta (que use correctamente las funciones de Python, operadores, funciones math, etc, y se utilice la variable x para la misma)."
+        except ValueError:
+            plot_function(function_f, False, [(interval_a, 0), (interval_b, 0)]);
+            return "Error: Valor fuera del dominio permitido para la función. Verifique que los valores de 'x' sean válidos en el dominio de la función."
 
-        # Si el producto f(a) * f(b) no es negativo, el intervalo proporcionado no es adecuado para la bisección.
+        except SyntaxError:
+            return "Error de sintaxis en la función ingresada. Verifique la expresión y asegúrese de que sea válida en Python."
+
+        except NameError:
+            return "Error: Nombre no definido en la función. Asegúrese de usar la variable 'x' y las funciones de la biblioteca 'math' correctamente."
+
+        except ZeroDivisionError:
+            return "Error: División por cero en la función. Asegúrese de que la función no tenga denominadores que se anulen en el intervalo dado."
+
+        except Exception as e:
+            return f"Error en la función: {str(e)}."
+        
         if fa * fb > 0:
-            return "El intervalo es inadecuado, recuerde que se debe encontrar un raíz para el intervalo dado".format(
-                max_iterations
-            )
+            plot_function(function_f, False, [(interval_a, 0), (interval_b, 0)]);
+            return "El intervalo es inadecuado, recuerde que se debe encontrar un raíz para el intervalo dado"
 
         return True

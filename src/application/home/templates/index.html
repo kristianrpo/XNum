@@ -18,7 +18,9 @@
           <div>
             <h1 class="text-black display-4 fw-bold pe-lg-8">Resuelve problemas con precisión utilizando XNum</h1>
             <p class="text-black-50 mb-4 lead">Descubre la eficiencia de los métodos numéricos para encontrar soluciones rapidamente. ¡Empieza a optimizar tus resultados ahora!</p>
-            <a href="#senl-section" class="btn btn-dark">Encuentra SNENL</a>
+            <a href="#senl-section" class="btn btn-dark mb-2 mr-2">Encuentra SNENL</a>
+            <a href="#systems-section" class="btn btn-dark mb-2 mr-2">Encuentra SNSE</a>
+            <a href="#interpolation-section" class="btn btn-dark mb-2 mr-2">Encuentra IN</a>
           </div>
         </div>
         <div class="col-xl-6 col-lg-6 col-md-12 text-lg-end text-center pt-6 mt-5">
@@ -131,8 +133,52 @@
           <div class="card no-border"></div>
         </div>
         <div class="col"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="interpolation-section">
+    <h2 class="font-weight-bold">Interpolación (IN)</h2>
+    <p class="text-secondary">Usa métodos para generar interpolaciones</p>
+    <div class="cards-container center-cards">
+      <div class="row">
+        <div class="col">
+          <a class="card no-border" href="{% url 'numerical_method:vandermonde' %}">
+            <img src="{% static 'img/home/vandermonde.webp' %}" class="card-img-top" alt="Vandermonde" />
+            <div class="card-body">
+              <p class="card-text text-center">Método de Vandermonde</p>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a class="card no-border" href="{% url 'numerical_method:vandermonde' %}">
+            <img src="{% static 'img/home/newton-int.webp' %}" class="card-img-top" alt="Vandermonde" />
+            <div class="card-body">
+              <p class="card-text text-center">Método de Newton</p>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a class="card no-border" href="{% url 'numerical_method:lagrange' %}">
+            <img src="{% static 'img/home/lagrange.webp' %}" class="card-img-top" alt="Lagrange" />
+            <div class="card-body">
+              <p class="card-text text-center">Método de lagrange</p>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a class="card no-border" href="{% url 'numerical_method:vandermonde' %}">
+            <img src="{% static 'img/home/spline.webp' %}" class="card-img-top" alt="Vandermonde" />
+            <div class="card-body">
+              <p class="card-text text-center">Método de Spline</p>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <div class="card no-border"></div>
         <div class="col"></div>
       </div>
     </div>
   </section>
+
 {% endblock %}
