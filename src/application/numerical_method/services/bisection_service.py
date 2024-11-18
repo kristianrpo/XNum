@@ -64,16 +64,6 @@ class BisectionService(IntervalMethod):
                 "root": interval[1],
             }
 
-        # Si el producto de los valores en los extremos del intervalo es positivo, no se puede garantizar la existencia de una raíz.
-        if fa * fb > 0:
-            return {
-                "message_method": "El intervalo es inadecuado, recuerde que se debe encontrar un raíz para el intervalo dado",
-                "table": {},
-                "is_successful": True,
-                "have_solution": False,
-                "root": 0.0,
-            }
-
         # Ejecutamos el proceso de bisección mientras no se exceda el número máximo de iteraciones.
         while current_iteration <= max_iterations:
             # Almacenamos la información de la iteración actual en la tabla.
@@ -210,5 +200,9 @@ class BisectionService(IntervalMethod):
 
         except Exception as e:
             return f"Error en la función: {str(e)}."
+        
+        if fa * fb > 0:
+            plot_function(function_f, False, [(interval_a, 0), (interval_b, 0)]);
+            return "El intervalo es inadecuado, recuerde que se debe encontrar un raíz para el intervalo dado"
 
         return True
