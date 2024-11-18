@@ -190,16 +190,17 @@ class BisectionService(IntervalMethod):
             return "Error: Valor fuera del dominio permitido para la función. Verifique que los valores de 'x' sean válidos en el dominio de la función."
 
         except SyntaxError:
-            return "Error de sintaxis en la función ingresada. Verifique la expresión y asegúrese de que sea válida en Python."
+            return "Error de sintaxis en la función ingresada: Verifique la expresión y asegúrese de que sea válida en Python."
 
         except NameError:
-            return "Error: Nombre no definido en la función. Asegúrese de usar la variable 'x' y las funciones de la biblioteca 'math' correctamente."
+            return "Error de nombre en la función ingresada: Nombre no definido en la función. Asegúrese de usar la variable 'x' y las funciones de la biblioteca 'math' correctamente."
 
         except ZeroDivisionError:
+            plot_function(function_f, False, [(interval_a, 0), (interval_b, 0)]);
             return "Error: División por cero en la función. Asegúrese de que la función no tenga denominadores que se anulen en el intervalo dado."
 
         except Exception as e:
-            return f"Error en la función: {str(e)}."
+            return f"Error desconocido: {str(e)}."
         
         if fa * fb > 0:
             plot_function(function_f, False, [(interval_a, 0), (interval_b, 0)]);

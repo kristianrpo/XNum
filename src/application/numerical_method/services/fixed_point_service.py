@@ -153,12 +153,13 @@ class FixedPointService(IterativeMethod):
             return "Error de sintaxis en la función ingresada. Verifique la expresión y asegúrese de que sea válida en Python."
 
         except NameError:
-            return "Error: Nombre no definido en la función. Asegúrese de usar la variable 'x' y las funciones de la biblioteca 'math' correctamente."
+            return "Error de nombre en la función ingresada: Nombre no definido en la función. Asegúrese de usar la variable 'x' y las funciones de la biblioteca 'math' correctamente."
 
         except ZeroDivisionError:
+            plot_function(function_f, False, [(x0, 0)]);
             return "Error: División por cero en la función. Asegúrese de que la función no tenga denominadores que se anulen en el intervalo dado."
 
         except Exception as e:
-            return f"Error en la función: {str(e)}."
+            return f"Error desconocido: {str(e)}."
 
         return True
