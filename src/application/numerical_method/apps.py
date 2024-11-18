@@ -23,5 +23,6 @@ class NumericalMethodConfig(AppConfig):
                 "src.application.numerical_method.views.vandermonde_view",
                 "src.application.numerical_method.views.spline_linear_view",
                 "src.application.numerical_method.views.spline_cubic_view",
+                "src.application.numerical_method.views.lagrange_view",
             ]
         )

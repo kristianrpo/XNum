@@ -1,4 +1,5 @@
 import math
+from src.application.shared.utils.plot_function import plot_function
 from src.application.numerical_method.interfaces.iterative_method import (
     IterativeMethod,
 )
@@ -145,7 +146,8 @@ class FixedPointService(IterativeMethod):
             x = g
             f = eval(function_f)
         except ValueError:
-            return "Error: Valor fuera del dominio permitido para la función. Verifique que los valores de 'x' sean válidos en el dominio de la función."
+            plot_function(function_f, False, [(x0, 0)]);
+            return "Error: Valor fuera del dominio permitido para la función (f(x) o g(x)). Verifique que los valores de 'x' sean válidos en el dominio de la función."
 
         except SyntaxError:
             return "Error de sintaxis en la función ingresada. Verifique la expresión y asegúrese de que sea válida en Python."

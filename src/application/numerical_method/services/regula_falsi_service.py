@@ -1,4 +1,5 @@
 import math
+from src.application.shared.utils.plot_function import plot_function
 from src.application.numerical_method.interfaces.interval_method import (
     IntervalMethod,
 )
@@ -61,26 +62,6 @@ class RegulaFalsiService(IntervalMethod):
                 "is_successful": True,
                 "have_solution": True,
                 "root": interval[1],
-            }
-
-        # Si el producto de los valores en los extremos del intervalo es positivo, no se puede garantizar la existencia de una raíz.
-        if fa * fb > 0:
-            return {
-                "message_method": "El intervalo es inadecuado, recuerde que se debe encontrar un raíz para el intervalo dado",
-                "table": {},
-                "is_successful": True,
-                "have_solution": False,
-                "root": 0.0,
-            }
-
-        # Validación de division por cero en la formula de regla falsa
-        if fa == fb:
-            return {
-                "message_method": "División por cero. Los valores de f(a) y f(b) son iguales, lo cual impide aplicar la Regla Falsa.",
-                "table": {},
-                "is_successful": True,
-                "have_solution": False,
-                "root": 0.0,
             }
 
         # Ejecutamos el proceso de regla falsa mientras no se exceda el número máximo de iteraciones.
@@ -205,6 +186,7 @@ class RegulaFalsiService(IntervalMethod):
             fb = eval(function_f)
 
         except ValueError:
+            plot_function(function_f, False, [(interval_a, 0), (interval_b, 0)]);
             return "Error: Valor fuera del dominio permitido para la función. Verifique que los valores de 'x' sean válidos en el dominio de la función."
 
         except SyntaxError:
@@ -218,5 +200,16 @@ class RegulaFalsiService(IntervalMethod):
 
         except Exception as e:
             return f"Error en la función: {str(e)}."
+        
+        # Si el producto de los valores en los extremos del intervalo es positivo, no se puede garantizar la existencia de una raíz.
+        if fa * fb > 0:
+            plot_function(function_f, False, [(interval_a, 0), (interval_b, 0)]);
+            return "El intervalo es inadecuado, recuerde que se debe encontrar un raíz para el intervalo dado"
+
+        # Validación de division por cero en la formula de regla falsa
+        if fa == fb:
+            plot_function(function_f, False, [(interval_a, 0), (interval_b, 0)]);
+            return "División por cero. Los valores de f(a) y f(b) son iguales, lo cual impide aplicar la Regla Falsa."
+                
 
         return True

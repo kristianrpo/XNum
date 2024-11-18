@@ -32,8 +32,15 @@ from src.application.numerical_method.services.sor_service import (
 from src.application.numerical_method.services.vandermonde_service import (
     VandermondeService,
 )
-from src.application.numerical_method.services.spline_linear_service import SplineLinearService
-from src.application.numerical_method.services.spline_cubic_service import SplineCubicService
+from src.application.numerical_method.services.spline_linear_service import (
+    SplineLinearService,
+)
+from src.application.numerical_method.services.spline_cubic_service import (
+    SplineCubicService,
+)
+from src.application.numerical_method.services.lagrange_service import (
+  LagrangeService,
+)
 
 
 class NumericalMethodContainer(containers.DeclarativeContainer):
@@ -50,3 +57,4 @@ class NumericalMethodContainer(containers.DeclarativeContainer):
     vandermonde_service = providers.Factory(VandermondeService)
     spline_linear_service = providers.Factory(SplineLinearService)
     spline_cubic_service = providers.Factory(SplineCubicService)
+    lagrange_service = providers.Factory(LagrangeService)

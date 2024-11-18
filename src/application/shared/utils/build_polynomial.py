@@ -10,7 +10,7 @@ def build_polynomial(coefficients):
             else:
                 polynomial_terms.append(f"+{abs(coefficients[i])}")
         else:
-            polynomial_terms.append(f"+{coefficients[i]}*x**{i}")
+            polynomial_terms.append(f"+{coefficients[i]}*x**{i} ")
 
     polynomial_terms.reverse()
     polynomial = "".join(polynomial_terms)

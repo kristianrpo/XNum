@@ -13,6 +13,7 @@ from .views.sor_view import SORView
 from .views.vandermonde_view import VandermondeView
 from .views.spline_linear_view import SplineLinearView
 from .views.spline_cubic_view import SplineCubicView
+from .views.lagrange_view import LagrangeView
 
 app_name = "numerical_method"
 urlpatterns = [
@@ -85,5 +86,10 @@ urlpatterns = [
         "spline-cubic/",
         SplineCubicView.as_view(),
         name="spline_cubic",
+    ),
+        path(
+        "lagrange/",
+        LagrangeView.as_view(),
+        name="lagrange",
     ),
 ]
