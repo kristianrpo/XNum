@@ -11,6 +11,8 @@ from .views.jacobi_view import JacobiView
 from .views.gauss_seidel_view import GaussSeidelView
 from .views.sor_view import SORView
 from .views.vandermonde_view import VandermondeView
+from .views.spline_linear_view import SplineLinearView
+from .views.spline_cubic_view import SplineCubicView
 from .views.lagrange_view import LagrangeView
 
 app_name = "numerical_method"
@@ -74,6 +76,16 @@ urlpatterns = [
         "vandermonde/",
         VandermondeView.as_view(),
         name="vandermonde",
+    ),
+    path(
+        "spline-linear/",
+        SplineLinearView.as_view(),
+        name="spline_linear",
+    ),
+    path(
+        "spline-cubic/",
+        SplineCubicView.as_view(),
+        name="spline_cubic",
     ),
         path(
         "lagrange/",
