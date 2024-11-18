@@ -47,13 +47,22 @@ class BisectionView(TemplateView):
         )
 
         if isinstance(response_validation, str):
-            error_response = {
+            if(response_validation.find("Error de sintaxis") != -1 or response_validation.find("Error de nombre") != -1 or response_validation.find("Error desconocido") != -1):
+                error_response = {
                 "message_method": response_validation,
                 "table": {},
-                "is_successful": True,
+                "is_successful": False,
                 "have_solution": False,
                 "root": 0.0,
-            }
+                }
+            else:
+                error_response = {
+                    "message_method": response_validation,
+                    "table": {},
+                    "is_successful": True,
+                    "have_solution": False,
+                    "root": 0.0,
+                }
             template_data = template_data | error_response
             context["template_data"] = template_data
             return self.render_to_response(context)
