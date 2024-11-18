@@ -50,7 +50,7 @@ class FixedPointView(TemplateView):
             error_response = {
                 "message_method": response_validation,
                 "table": {},
-                "is_successful": False,
+                "is_successful": True,
                 "have_solution": False,
                 "root": 0.0,
             }

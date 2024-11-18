@@ -196,6 +196,7 @@ class BisectionService(IntervalMethod):
             x = interval_b
             fb = eval(function_f)
         except ValueError:
+            plot_function(function_f, False, [(interval_a, 0), (interval_b, 0)]);
             return "Error: Valor fuera del dominio permitido para la función. Verifique que los valores de 'x' sean válidos en el dominio de la función."
 
         except SyntaxError:
