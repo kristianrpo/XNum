@@ -53,15 +53,16 @@ class LagrangeView(TemplateView):
         x_values = response_validation[0]
         y_values = response_validation[1]
 
+        # Ordenar puntos para la representación gráfica
+        points = list(zip(x_values, y_values))
+        sorted_points = sorted(points, key=lambda point: point[0])
+        
         # Ejecutar el método de Lagrange
         method_response = self.method_service.solve(
             x=x_values,
             y=y_values,
         )
 
-        # Ordenar puntos para la representación gráfica
-        points = list(zip(x_values, y_values))
-        sorted_points = sorted(points, key=lambda point: point[0])
 
         if method_response["is_successful"]:
             # Graficar la función interpolante
