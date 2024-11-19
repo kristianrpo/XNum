@@ -46,7 +46,7 @@ class NewtonService(IterativeMethod):
                     return self._prepare_response(
                         message=f"La derivada es cero en x = {x0_current}. No se puede continuar.",
                         table=table,
-                        is_successful=False,
+                        is_successful=True,
                         have_solution=False,
                         points=points,
                         function=function_f,
@@ -57,7 +57,7 @@ class NewtonService(IterativeMethod):
                 return self._prepare_response(
                     message=f"Error al evaluar la función o su derivada: {str(e)}.",
                     table=table,
-                    is_successful=False,
+                    is_successful=True,
                     have_solution=False,
                     points=points,
                     function=function_f,
