@@ -4,7 +4,7 @@ from src.application.numerical_method.interfaces.iterative_method import (
     IterativeMethod,
 )
 from src.application.shared.utils.convert_math_to_simply import convert_math_to_sympy
-
+from src.application.shared.utils.plot_function import plot_function
 
 class MultipleRoots2Service(IterativeMethod):
     def solve(
@@ -21,8 +21,8 @@ class MultipleRoots2Service(IterativeMethod):
 
         # Convierte la función ingresada de `math` a `SymPy`
         sympy_function_f = convert_math_to_sympy(function_f)
-        # Intenta convertir la función a una expresión simbólica usando sympify
 
+        # Intenta convertir la función a una expresión simbólica usando sympify
         f_expr = sp.sympify(sympy_function_f)
         f_prime_expr = sp.diff(f_expr, x)  # Primera derivada
         f_double_prime_expr = sp.diff(f_prime_expr, x)  # Segunda derivada
@@ -39,20 +39,23 @@ class MultipleRoots2Service(IterativeMethod):
         x0_current = x0
         current_error = math.inf
         current_iteration = 1
+
         # Bucle del método de raíces múltiples con segunda derivada
         while current_iteration <= max_iterations:
             try:
                 fx = f(x0_current)
                 f_prime_x = f_prime(x0_current)
                 f_double_prime_x = f_double_prime(x0_current)
+
                 if f_prime_x == 0 or f_double_prime_x == 0:
                     return {
                         "message_method": f"Una de las derivadas es cero en x = {x0_current}. No se puede continuar.",
                         "table": table,
-                        "is_successful": False,
+                        "is_successful": True,
                         "have_solution": False,
                         "root": 0.0,
                     }
+
                 # Aplicar la fórmula del método de raíces múltiples con segunda derivada
                 x_next = x0_current - (fx * f_prime_x) / (
                     f_prime_x**2 - fx * f_double_prime_x
@@ -61,10 +64,11 @@ class MultipleRoots2Service(IterativeMethod):
                 return {
                     "message_method": f"Error al evaluar la función o sus derivadas: {str(e)}.",
                     "table": {},
-                    "is_successful": False,
+                    "is_successful": True,
                     "have_solution": False,
                     "root": 0.0,
                 }
+
             # Guardar los datos de la iteración actual en la tabla
             table[current_iteration] = {
                 "iteration": current_iteration,
@@ -73,12 +77,18 @@ class MultipleRoots2Service(IterativeMethod):
                 "f_prime_evaluated": f_prime_x,
                 "f_double_prime_evaluated": f_double_prime_x,
                 "next_x": x_next,
-                "error": (
-                    current_error
-                    if current_iteration == 1
-                    else abs(x_next - x0_current)
-                ),
             }
+
+            # Calcular el error dependiendo de la precisión
+            if current_iteration > 1:
+                if precision:  # Error absoluto
+                    current_error = abs(x_next - x0_current)
+                else:  # Error relativo
+                    current_error = abs((x_next - x0_current) / x_next)
+                table[current_iteration]["error"] = current_error
+            else:
+                table[current_iteration]["error"] = current_error  # Primera iteración
+
             # Verificar si se ha encontrado una raíz exacta o una aproximación aceptable
             if fx == 0:
                 return {
@@ -88,7 +98,7 @@ class MultipleRoots2Service(IterativeMethod):
                     "have_solution": True,
                     "root": x0_current,
                 }
-            if current_iteration > 1 and abs(x_next - x0_current) < tolerance:
+            if current_iteration > 1 and current_error < tolerance:
                 return {
                     "message_method": f"{x0_current} es una aproximación de la raíz de f(x) con un error menor a {tolerance}.",
                     "table": table,
@@ -96,9 +106,11 @@ class MultipleRoots2Service(IterativeMethod):
                     "have_solution": True,
                     "root": x0_current,
                 }
+
             # Actualizar x0 para la siguiente iteración
             x0_current = x_next
             current_iteration += 1
+
         # Si se alcanzó el número máximo de iteraciones sin encontrar una raíz
         return {
             "message_method": f"El método funcionó correctamente pero no se encontró solución en {max_iterations} iteraciones.",
@@ -116,7 +128,6 @@ class MultipleRoots2Service(IterativeMethod):
         function_f: str,
         **kwargs,
     ) -> str | bool:
-
         # Inicializa la variable simbólica para usar en SymPy
         x = sp.symbols("x")
         # Convierte la función ingresada de `math` a `SymPy`
@@ -124,14 +135,18 @@ class MultipleRoots2Service(IterativeMethod):
 
         # Validación de los parámetros de entrada tolerancia positiva
         if not isinstance(tolerance, (int, float)) or tolerance <= 0:
+            plot_function(function_f, False, [(x0, 0)])
             return "La tolerancia debe ser un número positivo"
 
-        # Validación de los parámetros de entrada maximo numero de iteraciones positivo
+        # Validación de los parámetros de entrada máximo número de iteraciones positivo
         if not isinstance(max_iterations, int) or max_iterations <= 0:
+            plot_function(function_f, False, [(x0, 0)])
             return "El máximo número de iteraciones debe ser un entero positivo."
 
         try:
             f_expr = sp.sympify(sympy_function_f)
+            if f_expr.free_symbols != {x}:
+                return "Error al interpretar la función: utilice la variable 'x'."
             f_prime_expr = sp.diff(f_expr, x)
             f_double_prime_expr = sp.diff(f_prime_expr, x)
         except Exception as e:
@@ -143,3 +158,5 @@ class MultipleRoots2Service(IterativeMethod):
             sp.lambdify(x, f_double_prime_expr, modules=["math"])
         except Exception as e:
             return f"Error al convertir la función o sus derivadas a formato numérico: {str(e)}."
+
+        return True

@@ -4,7 +4,7 @@ from src.application.numerical_method.interfaces.iterative_method import (
     IterativeMethod,
 )
 from src.application.shared.utils.convert_math_to_simply import convert_math_to_sympy
-
+from src.application.shared.utils.plot_function import plot_function
 
 class MultipleRoots1Service(IterativeMethod):
     def solve(
@@ -46,7 +46,7 @@ class MultipleRoots1Service(IterativeMethod):
                     return {
                         "message_method": f"La derivada es cero en x = {x0_current}. No se puede continuar.",
                         "table": table,
-                        "is_successful": False,
+                        "is_successful": True,
                         "have_solution": False,
                         "root": 0.0,
                     }
@@ -56,7 +56,7 @@ class MultipleRoots1Service(IterativeMethod):
                 return {
                     "message_method": f"Error al evaluar la función o su derivada: {str(e)}.",
                     "table": table,
-                    "is_successful": False,
+                    "is_successful": True,
                     "have_solution": False,
                     "root": 0.0,
                 }
@@ -67,12 +67,23 @@ class MultipleRoots1Service(IterativeMethod):
                 "f_evaluated": fx,
                 "f_prime_evaluated": f_prime_x,
                 "next_x": x_next,
-                "error": (
-                    current_error
-                    if current_iteration == 1
-                    else abs(x_next - x0_current)
-                ),
             }
+
+            # Cálculo del error según la precisión (absoluto o relativo)
+            if precision == 1:  # Error absoluto
+                if current_iteration == 1:
+                    table[current_iteration]["error"] = current_error
+                else:
+                    current_error = abs(x_next - x0_current)
+                    table[current_iteration]["error"] = current_error
+
+            elif precision == 0:  # Error relativo
+                if current_iteration == 1:
+                    table[current_iteration]["error"] = current_error
+                else:
+                    current_error = abs((x_next - x0_current) / x_next)
+                    table[current_iteration]["error"] = current_error
+
             # Verificar si se ha encontrado una raíz exacta o una aproximación aceptable
             if fx == 0:
                 return {
@@ -82,7 +93,7 @@ class MultipleRoots1Service(IterativeMethod):
                     "have_solution": True,
                     "root": x0_current,
                 }
-            if current_iteration > 1 and abs(x_next - x0_current) < tolerance:
+            if current_iteration > 1 and current_error < tolerance:
                 return {
                     "message_method": f"{x0_current} es una aproximación de la raíz de f(x) con un error menor a {tolerance}.",
                     "table": table,
@@ -90,9 +101,11 @@ class MultipleRoots1Service(IterativeMethod):
                     "have_solution": True,
                     "root": x0_current,
                 }
+
             # Actualizar x0 para la siguiente iteración
             x0_current = x_next
             current_iteration += 1
+
         # Si se alcanzó el número máximo de iteraciones sin encontrar una raíz
         return {
             "message_method": f"El método funcionó correctamente pero no se encontró solución en {max_iterations} iteraciones.",
@@ -118,20 +131,20 @@ class MultipleRoots1Service(IterativeMethod):
 
         # Validación de los parámetros de entrada tolerancia positiva
         if not isinstance(tolerance, (int, float)) or tolerance <= 0:
+            plot_function(function_f, False, [(x0, 0)]);  # Graficar incluso si hay error
             return "La tolerancia debe ser un número positivo"
 
-        # Validación de los parámetros de entrada maximo numero de iteraciones positivo
+        # Validación de los parámetros de entrada máximo número de iteraciones positivo
         if not isinstance(max_iterations, int) or max_iterations <= 0:
+            plot_function(function_f, False, [(x0, 0)]);  # Graficar incluso si hay error
             return "El máximo número de iteraciones debe ser un entero positivo."
 
         try:
             f_expr = sp.sympify(sympy_function_f)
+            if f_expr.free_symbols != {x}:
+                return "Error al interpretar la función: utilice la variable 'x'."
             f_prime_expr = sp.diff(f_expr, x)
         except Exception as e:
             return f"Error al interpretar la función ingresada o su derivada: {str(e)}."
 
-        try:
-            sp.lambdify(x, f_expr, modules=["math"])
-            sp.lambdify(x, f_prime_expr, modules=["math"])
-        except Exception as e:
-            return f"Error al convertir la función o su derivada a formato numérico: {str(e)}."
+        return True
