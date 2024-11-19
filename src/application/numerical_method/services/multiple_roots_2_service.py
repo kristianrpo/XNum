@@ -4,7 +4,7 @@ from src.application.numerical_method.interfaces.iterative_method import (
     IterativeMethod,
 )
 from src.application.shared.utils.convert_math_to_simply import convert_math_to_sympy
-
+from src.application.shared.utils.plot_function import plot_function
 
 class MultipleRoots2Service(IterativeMethod):
     def solve(
@@ -49,7 +49,7 @@ class MultipleRoots2Service(IterativeMethod):
                     return {
                         "message_method": f"Una de las derivadas es cero en x = {x0_current}. No se puede continuar.",
                         "table": table,
-                        "is_successful": False,
+                        "is_successful": True,
                         "have_solution": False,
                         "root": 0.0,
                     }
@@ -61,7 +61,7 @@ class MultipleRoots2Service(IterativeMethod):
                 return {
                     "message_method": f"Error al evaluar la función o sus derivadas: {str(e)}.",
                     "table": {},
-                    "is_successful": False,
+                    "is_successful": True,
                     "have_solution": False,
                     "root": 0.0,
                 }
@@ -124,14 +124,18 @@ class MultipleRoots2Service(IterativeMethod):
 
         # Validación de los parámetros de entrada tolerancia positiva
         if not isinstance(tolerance, (int, float)) or tolerance <= 0:
+            plot_function(function_f, False, [(x0, 0)]);
             return "La tolerancia debe ser un número positivo"
 
         # Validación de los parámetros de entrada maximo numero de iteraciones positivo
         if not isinstance(max_iterations, int) or max_iterations <= 0:
+            plot_function(function_f, False, [(x0, 0)]);
             return "El máximo número de iteraciones debe ser un entero positivo."
 
         try:
             f_expr = sp.sympify(sympy_function_f)
+            if f_expr.free_symbols != {x}:
+                return "Error al interpretar la función: utilice la variable 'x'."
             f_prime_expr = sp.diff(f_expr, x)
             f_double_prime_expr = sp.diff(f_prime_expr, x)
         except Exception as e:

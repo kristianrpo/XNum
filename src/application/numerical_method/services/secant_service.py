@@ -2,7 +2,7 @@ import math
 from src.application.numerical_method.interfaces.interval_method import (
     IntervalMethod,
 )
-
+from src.application.shared.utils.plot_function import plot_function
 """
 El método de la secante es una técnica numérica para encontrar raíces de ecuaciones no lineales utilizando dos puntos iniciales interval_a y interval_b. La idea es aproximar la raíz mediante la intersección de la recta secante entre (a, f(a)) y (b, f(b)) con el eje x, y luego usar este nuevo punto como base para iterar el proceso hasta alcanzar una tolerancia deseada.
 """
@@ -175,14 +175,38 @@ class SecantService(IntervalMethod):
             return "El máximo número de iteraciones debe ser un entero positivo."
 
         # Evaluamos la función en los puntos iniciales interval_a y interval_b
+        
         try:
             x = interval_a
             f_a = eval(function_f)
             x = interval_b
             f_b = eval(function_f)
         except ValueError as ve:
+            plot_function(function_f, False, [(interval_a, 0), (interval_b, 0)]);
             return f"Error de dominio matemático al evaluar la función: {str(ve)}. Asegúrese de que los valores iniciales están en el dominio válido de la función."
+       
+        except SyntaxError:
+            return "Error de sintaxis en la función ingresada: Verifique la expresión y asegúrese de que sea válida en Python."
+
+        except NameError:
+            return "Error de nombre en la función ingresada: Nombre no definido en la función. Asegúrese de usar la variable 'x' y las funciones de la biblioteca 'math' correctamente."
+
+        except ZeroDivisionError:
+            plot_function(function_f, False, [(interval_a, 0), (interval_b, 0)]);
+            return "Error: División por cero en la función. Asegúrese de que la función no tenga denominadores que se anulen en el intervalo dado."
+
         except Exception as e:
-            return f"Error en la función ingresada, la descripción de este error fue: {str(e)}. Por favor, verifique que la función sea correcta (que use correctamente las funciones de Python, operadores, funciones math, etc., y se utilice la variable x para la misma)"
+            return f"Error desconocido: {str(e)}."
+        
+        # Si el producto de los valores en los extremos del intervalo es positivo, no se puede garantizar la existencia de una raíz.
+        if f_a * f_b > 0:
+            plot_function(function_f, False, [(interval_a, 0), (interval_b, 0)]);
+            return "El intervalo es inadecuado, recuerde que se debe encontrar un raíz para el intervalo dado"
+
+        # Validación de division por cero en la formula de regla falsa
+        if f_a == f_b:
+            plot_function(function_f, False, [(interval_a, 0), (interval_b, 0)]);
+            return "División por cero. Los valores de f(a) y f(b) son iguales, lo cual impide aplicar la Regla Falsa."
+                
 
         return True
