@@ -53,18 +53,10 @@ class SecantService(IntervalMethod):
             try:
                 x = Xn
                 f = eval(function_f)
-            except ValueError as ve:
-                return {
-                    "message_method": f"Error de dominio matemático al evaluar la función en el punto aproximado: {str(ve)}.",
-                    "table": table,
-                    "is_successful": False,
-                    "have_solution": False,
-                    "root": 0.0,
-                }
             except Exception as e:
                 return {
                     "message_method": f"Error al evaluar la función en el punto aproximado: {str(e)}.",
-                    "table": {},
+                    "table": table,
                     "is_successful": False,
                     "have_solution": False,
                     "root": 0.0,
@@ -80,15 +72,14 @@ class SecantService(IntervalMethod):
             # Para la primera iteración, el error se mantiene como infinito (no hay valor previo para comparar).
             if current_iteration == 1:
                 table[current_iteration]["error"] = current_error
-            # Calculamos el error como la diferencia absoluta entre el valor aproximado actual y el anterior.
+            # Calculamos el error dependiendo de la precisión
             else:
-                if precision:
+                if precision:  # Precisión absoluta
                     current_error = abs(
                         table[current_iteration]["approximate_value"]
                         - table[current_iteration - 1]["approximate_value"]
                     )
-                    table[current_iteration]["error"] = current_error
-                else:
+                else:  # Precisión relativa
                     current_error = abs(
                         (
                             table[current_iteration]["approximate_value"]
@@ -96,7 +87,7 @@ class SecantService(IntervalMethod):
                         )
                         / table[current_iteration]["approximate_value"]
                     )
-                    table[current_iteration]["error"] = current_error
+                table[current_iteration]["error"] = current_error
             # Si la función evaluada en el valor aproximado es cero, hemos encontrado la raíz exacta.
             if f == 0:
                 return {
@@ -126,14 +117,6 @@ class SecantService(IntervalMethod):
                 f_a = eval(function_f)
                 x = interval_b
                 f_b = eval(function_f)
-            except ValueError as ve:
-                return {
-                    "message_method": f"Error de dominio matemático durante la evaluación en el nuevo intervalo: {str(ve)}.",
-                    "table": table,
-                    "is_successful": False,
-                    "have_solution": False,
-                    "root": 0.0,
-                }
             except Exception as e:
                 return {
                     "message_method": f"Error durante la evaluación en el nuevo intervalo: {str(e)}.",

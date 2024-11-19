@@ -67,12 +67,23 @@ class MultipleRoots1Service(IterativeMethod):
                 "f_evaluated": fx,
                 "f_prime_evaluated": f_prime_x,
                 "next_x": x_next,
-                "error": (
-                    current_error
-                    if current_iteration == 1
-                    else abs(x_next - x0_current)
-                ),
             }
+
+            # Cálculo del error según la precisión (absoluto o relativo)
+            if precision == 1:  # Error absoluto
+                if current_iteration == 1:
+                    table[current_iteration]["error"] = current_error
+                else:
+                    current_error = abs(x_next - x0_current)
+                    table[current_iteration]["error"] = current_error
+
+            elif precision == 0:  # Error relativo
+                if current_iteration == 1:
+                    table[current_iteration]["error"] = current_error
+                else:
+                    current_error = abs((x_next - x0_current) / x_next)
+                    table[current_iteration]["error"] = current_error
+
             # Verificar si se ha encontrado una raíz exacta o una aproximación aceptable
             if fx == 0:
                 return {
@@ -82,7 +93,7 @@ class MultipleRoots1Service(IterativeMethod):
                     "have_solution": True,
                     "root": x0_current,
                 }
-            if current_iteration > 1 and abs(x_next - x0_current) < tolerance:
+            if current_iteration > 1 and current_error < tolerance:
                 return {
                     "message_method": f"{x0_current} es una aproximación de la raíz de f(x) con un error menor a {tolerance}.",
                     "table": table,
@@ -90,9 +101,11 @@ class MultipleRoots1Service(IterativeMethod):
                     "have_solution": True,
                     "root": x0_current,
                 }
+
             # Actualizar x0 para la siguiente iteración
             x0_current = x_next
             current_iteration += 1
+
         # Si se alcanzó el número máximo de iteraciones sin encontrar una raíz
         return {
             "message_method": f"El método funcionó correctamente pero no se encontró solución en {max_iterations} iteraciones.",
@@ -118,12 +131,12 @@ class MultipleRoots1Service(IterativeMethod):
 
         # Validación de los parámetros de entrada tolerancia positiva
         if not isinstance(tolerance, (int, float)) or tolerance <= 0:
-            plot_function(function_f, False, [(x0, 0)]);
+            plot_function(function_f, False, [(x0, 0)]);  # Graficar incluso si hay error
             return "La tolerancia debe ser un número positivo"
 
-        # Validación de los parámetros de entrada maximo numero de iteraciones positivo
+        # Validación de los parámetros de entrada máximo número de iteraciones positivo
         if not isinstance(max_iterations, int) or max_iterations <= 0:
-            plot_function(function_f, False, [(x0, 0)]);
+            plot_function(function_f, False, [(x0, 0)]);  # Graficar incluso si hay error
             return "El máximo número de iteraciones debe ser un entero positivo."
 
         try:
@@ -134,4 +147,4 @@ class MultipleRoots1Service(IterativeMethod):
         except Exception as e:
             return f"Error al interpretar la función ingresada o su derivada: {str(e)}."
 
-
+        return True
