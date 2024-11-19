@@ -53,9 +53,14 @@
                 <h2 class="font-weight-bold">Tramos del Spline Lineal</h2>
                 <p>Los tramos generados por el spline lineal son:</p>
                 <ul>
-                {% for tramo in template_data.spline_segments %}
-                    <li><b>S{{ forloop.counter }}(x) =</b> {{ tramo }}</li>
-                {% endfor %}
+                    {% if template_data.tramos %}
+                        <h3>Tramos del Spline Lineal</h3>
+                        <ul>
+                            {% for tramo in template_data.tramos %}
+                                <li>{{ tramo }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 </ul>
             </div>
             <div class="container d-flex justify-content-center">

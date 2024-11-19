@@ -167,10 +167,18 @@
           </a>
         </div>
         <div class="col">
-          <a class="card no-border" href="{% url 'numerical_method:vandermonde' %}">
-            <img src="{% static 'img/home/spline.webp' %}" class="card-img-top" alt="Vandermonde" />
+          <a class="card no-border" href="{% url 'numerical_method:spline_linear' %}">
+            <img src="{% static 'img/home/spline.webp' %}" class="card-img-top" alt="Spline Lineal" />
             <div class="card-body">
-              <p class="card-text text-center">Método de Spline</p>
+              <p class="card-text text-center">Método de Spline Lineal</p>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a class="card no-border" href="{% url 'numerical_method:spline_cubic' %}">
+            <img src="{% static 'img/home/spline.webp' %}" class="card-img-top" alt="Spline Cubico" />
+            <div class="card-body">
+              <p class="card-text text-center">Método de Spline Cubico</p>
             </div>
           </a>
         </div>

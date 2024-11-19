@@ -65,17 +65,30 @@ def plot_spline_linear(points: list[tuple[float, float]]) -> None:
 def plot_spline_cubic(title: str, points: list[tuple[float, float]], x_values, y_values):
     output_file = BASE_DIR / "static/img/numerical_method/spline_cubic_plot.svg"
 
-    # Crear el spline cúbico utilizando scipy
-    cs = CubicSpline(x_values, y_values)
-
-    # Generar un rango continuo de valores de x para la gráfica
-    x_continuo = np.linspace(min(x_values), max(x_values), 500)
-    y_continuo = cs(x_continuo)
-
-    # Configurar la gráfica
     plt.figure(figsize=(8, 6))
-    plt.plot(x_continuo, y_continuo, label="Spline Cúbico", color="blue")
-    plt.scatter(x_values, y_values, color="red", label="Puntos originales")
+
+    # Crear el spline cúbico con scipy
+    cs = CubicSpline(x_values, y_values, bc_type="natural")
+
+    # Generar un rango continuo de x para graficar el spline cúbico
+    x_range = np.linspace(min(x_values), max(x_values), 500)
+    y_range = cs(x_range)
+
+    # Graficar el spline cúbico
+    plt.plot(x_range, y_range, label="Spline Cúbico", color="blue")
+
+    # Graficar los puntos originales y etiquetarlos
+    for x, y in points:
+        plt.scatter(x, y, color="red")
+        plt.text(
+            x,
+            y,
+            f"({x:.1f}, {y:.1f})",
+            fontsize=9,
+            verticalalignment="bottom",
+            horizontalalignment="right",
+            color="black",
+        )
 
     # Configuración de la gráfica
     plt.title(title)

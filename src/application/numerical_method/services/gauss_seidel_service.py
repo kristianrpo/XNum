@@ -11,6 +11,7 @@ class GaussSeidelService(MatrixMethod):
         x0: list[float],  # Vector inicial de aproximación
         tolerance: float,  # Tolerancia para el error
         max_iterations: int,  # Número máximo de iteraciones
+        precision: int,  # Tipo de precisión (1 para decimales correctos, 0 para cifras significativas)
         **kwargs,
     ) -> dict:
 
@@ -36,16 +37,25 @@ class GaussSeidelService(MatrixMethod):
         while current_error > tolerance and current_iteration < max_iterations:
             # Iteración de Gauss-Seidel
             for i in range(n):
-                sum_others = np.dot(A[i, :i], x1[:i]) + np.dot(A[i, i + 1 :], x1[i + 1 :])
+                sum_others = np.dot(A[i, :i], x1[:i]) + np.dot(A[i, i + 1:], x1[i + 1:])
                 x1[i] = (b[i] - sum_others) / A[i, i]
 
             current_error = np.linalg.norm(x1 - x0, ord=np.inf)
 
+            # Aplicar precisión según el tipo seleccionado
+            if precision == 1:  # Decimales correctos
+                x1_rounded = [round(value, len(str(tolerance).split(".")[1])) for value in x1]
+                error_rounded = round(current_error, len(str(tolerance).split(".")[1]))
+            elif precision == 0:  # Cifras significativas
+                significant_digits = len(str(tolerance).replace("0.", ""))
+                x1_rounded = [float(f"{value:.{significant_digits}g}") for value in x1]
+                error_rounded = float(f"{current_error:.{significant_digits}g}")
+
             # Guardamos la información de la iteración actual
             table[current_iteration + 1] = {
                 "iteration": current_iteration + 1,
-                "X": x1.tolist(),
-                "Error": current_error,
+                "X": x1_rounded,
+                "Error": error_rounded,
             }
 
             # Preparación para la siguiente iteración
@@ -60,7 +70,7 @@ class GaussSeidelService(MatrixMethod):
                 "table": table,
                 "is_successful": True,
                 "have_solution": True,
-                "solution": x1.tolist(),
+                "solution": x1_rounded,
                 "spectral_radius": spectral_radius,
             }
         elif current_iteration >= max_iterations:
@@ -69,7 +79,7 @@ class GaussSeidelService(MatrixMethod):
                 "table": table,
                 "is_successful": True,
                 "have_solution": False,
-                "solution": x1.tolist(),
+                "solution": x1_rounded,
                 "spectral_radius": spectral_radius,
             }
         else:
@@ -83,8 +93,8 @@ class GaussSeidelService(MatrixMethod):
 
         # Si la matriz es 2x2, generar las gráficas
         if len(A) == 2:
-            plot_matrix_solution(table, x1.tolist(), spectral_radius)
-            plot_system_equations(A.tolist(), b.tolist(), x1.tolist())
+            plot_matrix_solution(table, x1_rounded, spectral_radius)
+            plot_system_equations(A.tolist(), b.tolist(), x1_rounded)
 
         return result
 

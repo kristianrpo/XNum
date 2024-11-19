@@ -35,6 +35,7 @@ class SORView(TemplateView):
         tolerance = float(request.POST.get("tolerance"))
         max_iterations = int(request.POST.get("max_iterations"))
         relaxation_factor = float(request.POST.get("relaxation_factor"))
+        precision_type = int(request.POST.get("precision"))
         matrix_size = int(request.POST.get("matrix_size"))
 
         # Validar entrada
@@ -74,6 +75,7 @@ class SORView(TemplateView):
             tolerance=tolerance,
             max_iterations=max_iterations,
             relaxation_factor=relaxation_factor,
+            precision_type=precision_type,  # Nuevo argumento para precisión
         )
 
         # Verificación de éxito y almacenamiento de la respuesta

@@ -34,6 +34,7 @@ class GaussSeidelView(TemplateView):
         tolerance = float(request.POST.get("tolerance"))
         max_iterations = int(request.POST.get("max_iterations"))
         matrix_size = int(request.POST.get("matrix_size"))
+        precision = int(request.POST.get("precision"))  # Capturamos el tipo de precisión
 
         response_validation = self.method_service.validate_input(
             matrix_a_raw=matrix_a_raw,
@@ -68,6 +69,7 @@ class GaussSeidelView(TemplateView):
             x0=x0,
             tolerance=tolerance,
             max_iterations=max_iterations,
+            precision=precision,  # Enviar el tipo de precisión al servicio
         )
 
         # Verificación de éxito y almacenamiento de la respuesta

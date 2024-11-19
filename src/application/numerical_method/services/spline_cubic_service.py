@@ -13,7 +13,12 @@ class SplineCubicService(InterpolationMethod):
                 "is_successful": False,
                 "have_solution": False,
             }
-
+        
+        # Asegurar que los datos estén ordenados por los valores de x
+        sorted_points = sorted(zip(x, y), key=lambda point: point[0])
+        x = [point[0] for point in sorted_points]
+        y = [point[1] for point in sorted_points]
+        
         # Crear el spline cúbico con scipy
         cs = CubicSpline(x, y, bc_type='natural')
 

@@ -11,6 +11,7 @@ class JacobiService(MatrixMethod):
         x0: list[float],  # Vector inicial de aproximación
         tolerance: float,  # Tolerancia para el error
         max_iterations: int,  # Número máximo de iteraciones
+        precision_type: str = "decimales_correctos",  # Tipo de precisión
         **kwargs,
     ) -> dict:
 
@@ -29,7 +30,7 @@ class JacobiService(MatrixMethod):
         L = np.tril(A, -1)
         U = np.triu(A, 1)
 
-        # Cálculo de la matriz de iteración T para el método SOR
+        # Cálculo de la matriz de iteración T para el método Jacobi
         T = np.linalg.inv(D).dot(L + U)
         spectral_radius = max(abs(np.linalg.eigvals(T)))
 
@@ -43,11 +44,15 @@ class JacobiService(MatrixMethod):
 
             current_error = np.linalg.norm(x1 - x0, ord=np.inf)
 
+            # Aplicar precisión según el tipo seleccionado
+            formatted_x1 = self.apply_precision(x1.tolist(), precision_type, tolerance)
+            formatted_error = self.apply_precision([current_error], precision_type, tolerance)[0]
+
             # Guardamos la información de la iteración actual
             table[current_iteration + 1] = {
                 "iteration": current_iteration + 1,
-                "X": x1.tolist(),
-                "Error": current_error,
+                "X": formatted_x1,
+                "Error": formatted_error,
             }
 
             # Preparación para la siguiente iteración
@@ -62,7 +67,7 @@ class JacobiService(MatrixMethod):
                 "table": table,
                 "is_successful": True,
                 "have_solution": True,
-                "solution": x1.tolist(),
+                "solution": formatted_x1,
                 "spectral_radius": spectral_radius,
             }
         elif current_iteration >= max_iterations:
@@ -71,7 +76,7 @@ class JacobiService(MatrixMethod):
                 "table": table,
                 "is_successful": True,
                 "have_solution": False,
-                "solution": x1.tolist(),
+                "solution": formatted_x1,
                 "spectral_radius": spectral_radius,
             }
         else:
@@ -89,6 +94,22 @@ class JacobiService(MatrixMethod):
             plot_system_equations(A.tolist(), b.tolist(), x1.tolist())
 
         return result
+
+    def apply_precision(self, values, precision_type, tolerance):
+        """
+        Aplica precisión a una lista de valores basada en el tipo de precisión seleccionado.
+        """
+        if precision_type == "cifras_significativas":
+            # Calcular cifras significativas según la tolerancia
+            significant_figures = -int(np.floor(np.log10(tolerance)))
+            return [round(value, significant_figures) for value in values]
+        elif precision_type == "decimales_correctos":
+            # Usar la cantidad de decimales basada en la tolerancia
+            decimal_places = -int(np.floor(np.log10(tolerance)))
+            return [round(value, decimal_places) for value in values]
+        else:
+            # Sin cambios si no se selecciona un tipo válido
+            return values
 
     def validate_input(
         self,
