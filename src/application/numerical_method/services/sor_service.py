@@ -12,6 +12,7 @@ class SORService(MatrixMethod):
         tolerance: float,  # Tolerancia para el error
         max_iterations: int,  # Número máximo de iteraciones
         relaxation_factor: float,  # Factor de relajación (w)
+        precision_type: int,  # Tipo de precisión (1 para decimales, 0 para cifras significativas)
         **kwargs,
     ) -> dict:
 
@@ -44,6 +45,15 @@ class SORService(MatrixMethod):
 
             # Calcular el error como norma infinito de la diferencia
             current_error = np.linalg.norm(x_new - x, ord=np.inf)
+
+            # Aplicar precisión al vector de soluciones y al error
+            if precision_type == 1:  # Decimales correctos
+                x_new = np.round(x_new, int(-np.floor(np.log10(tolerance))))
+                current_error = round(current_error, int(-np.floor(np.log10(tolerance))))
+            elif precision_type == 0:  # Cifras significativas
+                factor = 10 ** int(np.ceil(np.log10(abs(1 / tolerance))))
+                x_new = np.round(x_new * factor) / factor
+                current_error = round(current_error * factor) / factor
 
             # Guardar información en la tabla para la iteración actual
             table[current_iteration + 1] = {

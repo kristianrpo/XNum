@@ -52,8 +52,8 @@ class SplineLinearView(TemplateView):
         )
 
         if method_response["is_successful"]:
-            # Aquí ya se genera la gráfica desde el servicio
-            pass
+            # Incluir los tramos en el contexto si la solución fue exitosa
+            template_data["tramos"] = method_response.get("tramos", [])
 
         template_data = template_data | method_response
         context["template_data"] = template_data

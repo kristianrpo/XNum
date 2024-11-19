@@ -28,12 +28,16 @@ class JacobiView(TemplateView):
 
         template_data = {}
 
+        # Capturar los datos del formulario
         matrix_a_raw = request.POST.get("matrix_a", "")
         vector_b_raw = request.POST.get("vector_b", "")
         initial_guess_raw = request.POST.get("initial_guess", "")
         tolerance = float(request.POST.get("tolerance"))
         max_iterations = int(request.POST.get("max_iterations"))
         matrix_size = int(request.POST.get("matrix_size"))
+
+        # Capturar la selección de precisión
+        precision_type = request.POST.get("precision_type", "decimales_correctos")
 
         response_validation = self.method_service.validate_input(
             matrix_a_raw=matrix_a_raw,
@@ -61,13 +65,14 @@ class JacobiView(TemplateView):
         b = response_validation[1]
         x0 = response_validation[2]
 
-        # Ejecutar el método Jacobi con los parámetros recibidos
+        # Ejecutar el método Jacobi con los parámetros recibidos y el tipo de precisión
         method_response = self.method_service.solve(
             A=A,
             b=b,
             x0=x0,
             tolerance=tolerance,
             max_iterations=max_iterations,
+            precision_type=precision_type,  # Pasar el tipo de precisión al servicio
         )
 
         # Verificación de éxito y almacenamiento de la respuesta
